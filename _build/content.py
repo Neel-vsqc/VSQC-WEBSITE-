@@ -32,6 +32,8 @@ SERVICES = [
         "line": "From gap assessment to certification, across 35+ standards.",
         "intro": "Achieve global standards of excellence with our expert ISO implementation and auditing services. We guide you through seamless certification journeys tailored to your operational scope.",
         "tags": "Gap assessment · Documentation · Internal audits · Certification support",
+        "promise": "Build, certify and sustain your management system, step by step.",   # home showcase, line 1
+        "offerings": "Gap assessment · Documentation · Internal audits · Certification support",   # home showcase, line 2
         "loop": 3,
         "items": [
             ("Gap Assessment", "Evaluating the current state of your systems against desired standards. We identify critical operational gaps and establish a clear roadmap for successful implementation."),
@@ -53,6 +55,8 @@ SERVICES = [
         "line": "Build your ESG roadmap, measure impact and report with confidence.",
         "intro": "Drive sustainable growth and meet global ESG mandates with our specialized sustainability frameworks. We help you measure, manage, and report your environmental and social impact effectively.",
         "tags": "Materiality · Carbon, water & energy · ESG reporting · EcoVadis & SEDEX ratings",
+        "promise": "Assess, implement and report on ESG with confidence.",   # home showcase, line 1
+        "offerings": "Materiality · Carbon, water & energy · ESG reporting · EcoVadis & Sedex ratings",   # home showcase, line 2
         "loop": 5,
         "items": [
             ("ESG Gap Assessment", "Evaluating your current ESG maturity against global standards. We identify critical sustainability gaps and outline steps for improvement."),
@@ -81,6 +85,8 @@ SERVICES = [
         "line": "Select, train, monitor and rate the vendors you depend on.",
         "intro": "Strengthen your supply chain with our comprehensive vendor evaluation and capacity-building programs. Ensure your partners align with your quality, EHS, and sustainability standards.",
         "tags": "Selection audits · Capacity building · Cluster development · Vendor ratings",
+        "promise": "Select, develop, monitor and rate the vendors you depend on.",   # home showcase, line 1
+        "offerings": "Selection audits · Capacity building · Compliance audits · Vendor ratings",   # home showcase, line 2
         "loop": 7,
         "items": [
             ("Vendor Selection Audits", "Comprehensive evaluations of potential vendors covering Quality, EHS, Sustainability, Social, and InfoSec criteria. Ensures you partner with compliant and reliable suppliers."),
@@ -98,6 +104,8 @@ SERVICES = [
         "line": "Classroom and online training, from awareness to lead auditor.",
         "intro": "Empower your workforce with targeted awareness and lead auditor training programs. Our expert mentors deliver customized modules to bridge competency gaps and foster continuous improvement.",
         "tags": "Needs identification · Internal auditor · Lead implementer · Lead auditor with CBs",
+        "promise": "Build lasting capability, from awareness to lead auditor.",   # home showcase, line 1
+        "offerings": "Customised training · Needs identification · Internal auditor · Lead implementer",   # home showcase, line 2
         "loop": 9,
         "items": [
             ("Customised Classroom and Online Trainings", "Flexible, blended learning solutions tailored to your specific organizational needs. We deliver engaging content both in-person and via digital platforms."),
@@ -117,6 +125,8 @@ SERVICES = [
         "line": "Move your management systems onto AI-supported digital tools.",
         "intro": "Modernize your compliance and operational frameworks with AI-driven digital tools. Streamline audits, document management, and risk assessments through our innovative software solutions.",
         "tags": "Online audit tools · Document control · AI-based MIS & KPIs · Risk & BIA tools",
+        "promise": "Run your management systems on AI-enabled digital tools.",   # home showcase, line 1
+        "offerings": "Online audit tools · Document management · AI-based MIS & KPIs · Risk & BIA tools",   # home showcase, line 2
         "loop": 11,
         "items": [
             ("Digitisation of Management Systems with AI", "Upgrading traditional, manual processes into smart, automated workflows using Artificial Intelligence. Enhances accuracy, speed, and predictive capabilities."),
@@ -136,6 +146,8 @@ SERVICES = [
         "line": "Implement and audit the controls that protect your data.",
         "intro": "Protect your critical assets and ensure compliance with stringent data privacy regulations. We offer robust cybersecurity assessments, VAPT, and information security management systems.",
         "tags": "IT security audits · VAPT · DPIA · RoPA · Incident management",
+        "promise": "Implement and audit the controls that protect your information.",   # home showcase, line 1
+        "offerings": "IT security audits · VAPT · DPIA · RoPA",   # home showcase, line 2
         "loop": 13,
         "items": [
             ("Infosec Controls Monitoring and Statement of Applicability", "Continuous tracking of security controls to ensure they remain effective and relevant. We help you maintain an accurate, up-to-date Statement of Applicability (SoA)."),
@@ -154,6 +166,8 @@ SERVICES = [
         "line": "Audits, inspections and risk studies that keep people safe.",
         "intro": "Foster a secure working environment with our comprehensive health and safety audits. We provide strategic safety metrics tracking and hazard mitigation frameworks to protect your workforce.",
         "tags": "Safety audits · Incident investigation · HIRA · HAZOP · JSA · LOPA",
+        "promise": "Make safety measurable, from audits to risk studies.",   # home showcase, line 1
+        "offerings": "Safety audits · Incident investigation · Safety training · HIRA, HAZOP, JSA, LOPA",   # home showcase, line 2
         "loop": 15,
         "items": [
             ("EHS Project Management", "End-to-end planning and execution of Environmental, Health, and Safety initiatives. We ensure your safety projects are delivered on time and within compliance mandates."),
@@ -227,7 +241,30 @@ STANDARDS = [
 # Home page copy
 # ---------------------------------------------------------------
 HOME = {
-    "welcome": "Welcome to VSQC, your comprehensive partner for Management Systems, ESG, and Digital Transformation. We offer end-to-end consulting, auditing, and training services tailored to drive your organization's excellence and compliance.",
+    "about_statement": "We're VSQC. We help organisations do things properly, and prove it to the world.",
+    "about_intro": "Vaishno Sai Quality Consultants brings consultancy, audits, training and digital tools together under one roof. We help organisations build, certify and continually improve the management systems behind their quality, sustainability, information security and safety.",
+    # (label, line) — the last stop is highlighted as "now"
+    "about_timeline": [
+        ("1998", "Management consulting roots begin with Phoenix Consultants."),
+        ("2003", "VSQC is formed: Vaishno Sai Quality Consultants."),
+        ("3 offices", "Supporting organisations from India, Sri Lanka and the UAE."),
+        ("Today", "VSQC is itself certified to ISO 9001:2026."),
+    ],
+    # Two feature cards under the timeline
+    "about_start": {
+        "kicker": "Modular programme",
+        "title": "Start where you are",
+        "text": "From gap assessment to certification and beyond. Pick one step or the full journey. We work hands-on alongside your teams, so your system keeps delivering long after the audit.",
+        "steps": ["Gap assessment", "Implementation", "Certification", "And beyond"],
+        "steps_on": 2,   # how many step tiles are lit
+    },
+    "about_digital": {
+        "kicker": "Our platforms",
+        "title": "Quality, made digital",
+        "text": "Systemeta and Audito bring audits, documents, KPIs and risk into one place, with AI-based analysis. Clients and employees access both through the VSQC Portal.",
+        "apps": ["Systemeta", "Audito"],
+        "tags": ["Audits", "Documents", "KPIs", "Risk", "AI analysis"],
+    },
     "services_intro": "Explore our diverse range of specialized services designed to elevate your business operations. From ISO consultancy, sustainability to cybersecurity, find the right solutions for your specific industry needs.",
     "index": [
         ("portal.html", "VSQC Portal", "Access your personalized dashboard to track project progress, audit reports, and compliance metrics. A secure, unified gateway for our clients and team members."),

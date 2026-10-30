@@ -139,6 +139,36 @@
     update();
   }
 
+  // Statement words light up one by one as the line scrolls up the screen
+  document.querySelectorAll('[data-light-words]').forEach((el) => {
+    if (reduceMotion) return;
+    const words = el.textContent.trim().split(/\s+/);
+    el.setAttribute('aria-label', el.textContent.trim());
+    el.innerHTML = '';
+    const spans = words.map((w, i) => {
+      const s = document.createElement('span');
+      s.className = /^properly/i.test(w) ? 'lw lw--key' : 'lw';
+      s.setAttribute('aria-hidden', 'true');
+      s.textContent = w;
+      el.append(s, i < words.length - 1 ? ' ' : '');
+      return s;
+    });
+    el.classList.add('is-scrub');
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const r = el.getBoundingClientRect();
+      const h = innerHeight;
+      // 0 when the line's top reaches 85% down the screen, 1 when its bottom reaches 45%
+      const p = Math.min(1, Math.max(0, (h * 0.85 - r.top) / (h * 0.4 + r.height)));
+      const lit = Math.round(p * spans.length);
+      spans.forEach((s, i) => s.classList.toggle('on', i < lit));
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    addEventListener('resize', update);
+    update();
+  });
+
   /* ---------- 4. Pause background videos when off screen ---------- */
   const bgVideos = document.querySelectorAll('video[data-autopause]');
   if (bgVideos.length && 'IntersectionObserver' in window) {

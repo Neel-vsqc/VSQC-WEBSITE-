@@ -257,8 +257,8 @@ def build_home():
             <article class="svc" data-short="{e(s['short'])}">
               <p class="svc__count reveal"><span class="svc__num">{i+1:02d}</span> / {N:02d}</p>
               <h2 class="svc__title">{e(s['title'])}</h2>
-              <p class="svc__desc reveal">{e(s['line'])}</p>
-              <p class="svc__tags reveal">{e(s['tags'])}</p>
+              <p class="svc__desc reveal">{e(s['promise'])}</p>
+              <p class="svc__tags reveal">{e(s['offerings'])}</p>
               <a class="btn btn--line reveal" href="{svc_url(s)}">Explore {ARROW}</a>
             </article>""")
 
@@ -272,6 +272,38 @@ def build_home():
           </a>
         </li>""" for i, (href, t, d) in enumerate(HOME["index"], 1))
 
+    stops = HOME["about_timeline"]
+    about_stops = "\n".join(
+        f"""        <li class="about__stop{' about__stop--now' if i == len(stops) - 1 else ''} rv"><span class="about__yr">{e(yr)}</span><p>{e(text)}</p></li>"""
+        for i, (yr, text) in enumerate(stops))
+    start, digital = HOME["about_start"], HOME["about_digital"]
+    steps = "\n".join(
+        f"""              <li{' class="on"' if i < start['steps_on'] else ''}><b>{i + 1:02d}</b>{e(s)}</li>"""
+        for i, s in enumerate(start["steps"]))
+    apps = "\n".join(
+        f"""              <div class="about__app"><span>Platform</span><b>{e(a)}</b></div>""" for a in digital["apps"])
+    tags = "".join(f"<li>{e(t)}</li>" for t in digital["tags"])
+    about_cards = f"""        <article class="about__card rv">
+          <span class="about__kicker">{e(start['kicker'])}</span>
+          <h3 class="about__h">{e(start['title'])}</h3>
+          <p>{e(start['text'])}</p>
+          <div class="about__visual">
+            <ol class="about__steps">
+{steps}
+            </ol>
+          </div>
+        </article>
+        <article class="about__card rv">
+          <span class="about__kicker">{e(digital['kicker'])}</span>
+          <h3 class="about__h">{e(digital['title'])}</h3>
+          <p>{e(digital['text'])}</p>
+          <div class="about__visual">
+            <div class="about__apps">
+{apps}
+            </div>
+            <ul class="about__tags">{tags}</ul>
+          </div>
+        </article>"""
     html = head(
         "VSQC — Management Systems, ESG & Digital Transformation Consulting",
         "VSQC is a one stop shop for management services: ISO certifications, ESG frameworks, digital tools, information security and safety systems.",
@@ -293,8 +325,6 @@ def build_home():
         </div>
 
         <div class="services" id="services-ui" aria-label="Our services">
-          <p class="services__eyebrow"><span class="hairline"></span>Our services</p>
-          <ol class="rail" id="rail"></ol>
           <div class="svc-stack" id="svc-stack">{''.join(articles)}
           </div>
         </div>
@@ -317,10 +347,20 @@ def build_home():
       </div>
     </section>
 
-    <!-- WELCOME -->
-    <section class="statement">
+    <!-- ABOUT -->
+    <section class="about" id="about">
       <p class="eyebrow rv"><span class="hairline"></span>About VSQC</p>
-      <p class="statement__text rv">{e(HOME['welcome'])}</p>
+      <h2 class="about__quote" data-light-words>{e(HOME['about_statement'])}</h2>
+      <div class="about__intro">
+        <p class="about__lead rv">{e(HOME['about_intro'])}</p>
+        <div class="rv"><a class="btn btn--line" href="#services" data-scroll-step="0">Explore our services <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></div>
+      </div>
+      <ol class="about__line">
+{about_stops}
+      </ol>
+      <div class="about__cards">
+{about_cards}
+      </div>
     </section>
     {logos_block()}
 

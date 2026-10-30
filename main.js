@@ -21,7 +21,7 @@
   const CONFIG = {
     transitionRate: 2.6,  // transition clips are 10 s slow morphs → ~3.8 s on screen
     catchUpRate: 5,       // if the user scrolls on mid-transition, finish it quickly
-    textLead: 0.55,       // s before a transition ends that the new text starts rising
+    textDelay: 0.3,       // s after a transition starts that the new text slides in
     startBlend: 0.3,      // tiny blend from a mid-loop frame into a transition's first frame
     crossfade: 0.7,       // backward / multi-step jumps (spec: 0.6–0.8 s)
     textFallback: 6000,   // show text anyway if a video never loads
@@ -163,13 +163,12 @@
       // Preload the loop we will cut to
       this.layerFor(loopClipFor(step), [layer]);
 
-      const onTime = () => {
-        if (this.transition !== t) { v.removeEventListener('timeupdate', onTime); return; }
-        const left = (v.duration - v.currentTime) / (v.playbackRate || 1);
-        if (!t.cued && !t.queued && left <= CONFIG.textLead) { t.cued = true; this.onArrive(step); }
-      };
+      // Text slides in alongside the video instead of waiting for it to finish
+      setTimeout(() => {
+        if (this.transition === t && !t.cued && t.queued === null) { t.cued = true; this.onArrive(step); }
+      }, CONFIG.textDelay * 1000);
+
       const onEnded = () => {
-        v.removeEventListener('timeupdate', onTime);
         if (this.transition !== t) return;
         this.transition = null;
         this.current = step;
@@ -177,7 +176,6 @@
         if (!t.cued) this.onArrive(step);
         this.cutToLoop(step);
       };
-      v.addEventListener('timeupdate', onTime);
       v.addEventListener('ended', onEnded, { once: true });
     }
 
@@ -245,12 +243,11 @@
   const camera = document.getElementById('camera');
   const hero = document.getElementById('hero');
   const ui = document.getElementById('services-ui');
-  const rail = document.getElementById('rail');
   const articles = [...document.querySelectorAll('.svc')];
   const STEPS = articles.length;
 
   /* ---------------------------------------------------------------
-     4. Text — split titles into masked words, build the rail
+     4. Text — split titles into masked words
      --------------------------------------------------------------- */
   articles.forEach((a) => {
     const h = a.querySelector('.svc__title');
@@ -259,20 +256,6 @@
     h.innerHTML = words
       .map((w, i) => `<span class="w" aria-hidden="true"><span style="--i:${i}">${w}</span></span>`)
       .join(' ');
-  });
-
-  const railBtns = articles.map((a, i) => {
-    const li = document.createElement('li');
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'rail__btn';
-    b.title = a.dataset.short;
-    b.setAttribute('aria-label', `${String(i + 1).padStart(2, '0')} ${a.dataset.short}`);
-    b.innerHTML = `<span class="rail__mark"></span>${String(i + 1).padStart(2, '0')}`;
-    b.addEventListener('click', () => scrollToStep(i));
-    li.appendChild(b);
-    rail.appendChild(li);
-    return b;
   });
 
   const state = { step: null, shown: null, lock: null };
@@ -311,10 +294,6 @@
     state.step = step;
     state.shown = null;
     articles.forEach(leave);
-    railBtns.forEach((b, i) => {
-      if (i === step) b.setAttribute('aria-current', 'step');
-      else b.removeAttribute('aria-current');
-    });
     stage.goTo(step);
     clearTimeout(fallbackTimer);
     fallbackTimer = setTimeout(() => enter(step), CONFIG.textFallback);
