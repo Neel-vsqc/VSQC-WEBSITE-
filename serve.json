@@ -1,0 +1,66 @@
+{
+  "cleanUrls": false,
+  "directoryListing": false,
+  "rewrites": [
+    {
+      "source": "/portal",
+      "destination": "/portal.html"
+    },
+    {
+      "source": "/achievements",
+      "destination": "/achievements.html"
+    },
+    {
+      "source": "/policies",
+      "destination": "/policies.html"
+    },
+    {
+      "source": "/team",
+      "destination": "/team.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact.html"
+    },
+    {
+      "source": "/service-iso",
+      "destination": "/service-iso.html"
+    },
+    {
+      "source": "/service-esg",
+      "destination": "/service-esg.html"
+    },
+    {
+      "source": "/service-vendor",
+      "destination": "/service-vendor.html"
+    },
+    {
+      "source": "/service-training",
+      "destination": "/service-training.html"
+    },
+    {
+      "source": "/service-digital",
+      "destination": "/service-digital.html"
+    },
+    {
+      "source": "/service-infosec",
+      "destination": "/service-infosec.html"
+    },
+    {
+      "source": "/service-safety",
+      "destination": "/service-safety.html"
+    },
+    {
+      "source": "/index",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/services",
+      "destination": "/index.html"
+    }
+  ]
+}
