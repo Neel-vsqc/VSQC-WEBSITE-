@@ -388,3 +388,27 @@
   /* ---------- misc ---------- */
   document.querySelectorAll('[data-year]').forEach((s) => { s.textContent = new Date().getFullYear(); });
 })();
+
+/* ---------- 9. Light / dark screens ----------
+   Sections after the first screen alternate light · dark · light …
+   On the home page the hero is light and the services alternate
+   (01 dark, 02 light …). Colours live in styles.css. */
+(() => {
+  const show = document.querySelector('.showcase');
+  [...document.querySelectorAll('main > section')].filter((s) => s !== show)
+    .forEach((s, i) => { s.dataset.tone = i % 2 === 0 ? 'light' : 'dark'; });
+
+  const stage = document.getElementById('stage');
+  if (!show || !stage) return;
+  const n = show.querySelectorAll('.svc').length;
+  const tick = () => {
+    const p = -show.getBoundingClientRect().top / stage.offsetHeight;
+    const step = p < 0.5 ? -1 : Math.min(n - 1, Math.floor(p - 0.5));
+    const theme = step === -1 || step % 2 === 1 ? 'light' : 'dark';
+    if (show.dataset.theme !== theme) show.dataset.theme = theme;
+  };
+  tick();
+  addEventListener('scroll', tick, { passive: true });
+  setInterval(tick, 200);
+  setTimeout(() => { show.dataset.ready = ''; }, 150);
+})();

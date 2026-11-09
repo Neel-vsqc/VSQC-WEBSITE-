@@ -337,7 +337,7 @@ def build_home():
     ) + header("home", home=True) + f"""
   <main id="content">
     <!-- SHOWCASE = HERO + SERVICES. .stage is sticky for the whole section. -->
-    <section class="showcase" id="top" style="--steps: {N}">
+    <section class="showcase" id="top" data-theme="light" style="--steps: {N}">
       <div class="stage" id="stage">
         <div class="stage__media" aria-hidden="true">
           <div class="stage__camera" id="camera">

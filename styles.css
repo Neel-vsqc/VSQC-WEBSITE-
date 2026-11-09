@@ -7,11 +7,13 @@
 /* ---------- Design tokens ---------- */
 :root {
   /* Sampled from the videos so the page and video edges are identical */
-  --bg: #030c18;
-  --bg-rgb: 3, 12, 24;
+  --bg: #0f2440;           /* royal navy (dark screens) */
+  --bg-rgb: 15, 36, 64;
+  --light: #b7c5d4;        /* mist (light screens) */
+  --light-rgb: 183, 197, 212;
 
   --ink: #f2f6fa;          /* headings */
-  --body: #c3d2df;         /* body copy */
+  --body: #c9d6e2;         /* body copy */
   --muted: rgba(195, 210, 223, 0.55);
   --line: rgba(195, 210, 223, 0.16);
   --accent: #6fd3e8;       /* soft cyan — use sparingly */
@@ -259,7 +261,7 @@ button, input, textarea, select { font-family: inherit; }   /* form controls don
   position: fixed;
   inset: 0;
   z-index: 49;
-  background: rgba(3, 12, 24, 0.55);
+  background: rgba(var(--bg-rgb), 0.55);
   opacity: 0;
   visibility: hidden;
   transition: opacity 160ms ease-out, visibility 0s linear 160ms;
@@ -456,7 +458,7 @@ button, input, textarea, select { font-family: inherit; }   /* form controls don
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(180deg, rgba(3, 12, 24, 0.05) 20%, rgba(3, 12, 24, 0.85));
+  background: linear-gradient(180deg, rgba(var(--bg-rgb), 0.05) 20%, rgba(var(--bg-rgb), 0.85));
 }
 .nav__tile b { font: 500 0.66rem/1 var(--sans); letter-spacing: 0.14em; color: var(--accent); text-transform: uppercase; }
 .nav__tile span { display: inline-flex; align-items: center; gap: 0.5rem; font: 500 0.86rem/1.25 var(--sans); color: var(--ink); }
@@ -1818,3 +1820,48 @@ button:disabled { opacity: 0.5; cursor: wait; }
   .bp-chip { animation: none; }
   .bp-card, .bp-el { opacity: 1; transform: none; transition: none; }
 }
+
+/* ================================================================
+   Light / dark theme
+   Every page opens on a light "mist" screen. After that the screens
+   alternate dark (royal navy) and light (mist):
+   home: hero light · service 01 dark · 02 light · 03 dark …
+   then the sections below: light · dark · light …
+   site.js sets data-tone on each section and data-theme on .showcase.
+   ================================================================ */
+.tone-light, .showcase[data-theme="light"], [data-tone="light"] {
+  --bg: var(--light);
+  --bg-rgb: var(--light-rgb);
+  --ink: #0b1a2c;
+  --body: #22364b;
+  --muted: rgba(11, 26, 44, 0.62);
+  --line: rgba(11, 26, 44, 0.16);
+  --accent: #14456e;
+}
+[data-tone] { background: var(--bg); color: var(--body); border-top-color: transparent; }
+.showcase, .showcase .svc { color: var(--ink); }
+.showcase .stage, .showcase .stage__media { background: var(--bg); }
+.showcase[data-ready] .stage,
+.showcase[data-ready] .stage__media { transition: background-color 800ms var(--ease-in-out); }
+.showcase .hero__inner, .showcase .svc { transition: color 600ms ease; }
+.showcase[data-theme="light"] .stage__shade { opacity: 0; }
+.stage__shade { transition: opacity 700ms ease; }
+
+/* dark text details on light screens */
+.showcase[data-theme="light"] .btn--ghost, [data-tone="light"] .btn--ghost { border-color: rgba(11, 26, 44, 0.32); }
+.showcase[data-theme="light"] .btn--solid:hover, [data-tone="light"] .btn--solid:hover { background: #000; }
+.showcase[data-theme="light"] .enter-hint__mouse { border-color: rgba(11, 26, 44, 0.35); }
+[data-tone="light"] .about__quote.is-scrub .lw:not(.on) { color: rgba(11, 26, 44, 0.2); }
+[data-tone="light"] .about__card, [data-tone="light"] .bp-card, [data-tone="light"] .bp-el,
+[data-tone="light"] .about__steps li { background: rgba(255, 255, 255, 0.3); border-color: var(--line); box-shadow: none; }
+[data-tone="light"] .logo { color: var(--ink); background: rgba(255, 255, 255, 0.32); border-color: rgba(11, 26, 44, 0.1); box-shadow: none; }
+[data-tone="light"] .logo::before, [data-tone="light"] .logo::after { display: none; }
+[data-tone="light"] .logo img { filter: brightness(0); opacity: 0.75; }
+[data-tone="light"] .field input, [data-tone="light"] .field textarea, [data-tone="light"] .field select { border-color: rgba(11, 26, 44, 0.3); color: var(--ink); }
+[data-tone="light"] .field input::placeholder, [data-tone="light"] .field textarea::placeholder { color: rgba(11, 26, 44, 0.45); }
+[data-tone="light"] .std__btn:hover .std__name { color: #000; }
+
+/* ---------- Animation videos: hidden for now ----------
+   The videos are kept (repo + C:\Users\sanum\VSQC-animation-videos).
+   Delete this block to bring them back. */
+.stage__camera, .stage__shade, .phero__camera, .bp-stage { display: none !important; }
