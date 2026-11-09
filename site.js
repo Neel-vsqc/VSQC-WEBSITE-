@@ -56,7 +56,7 @@
 
   // Lets the home page mark "Services" active while the showcase is on screen
   VSQC.setNav = (key) => {
-    document.querySelectorAll('.menu__link[data-nav]').forEach((a) => {
+    document.querySelectorAll('.menu__link[data-nav], .nav__link[data-nav]').forEach((a) => {
       if (a.dataset.nav === key) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
     });
@@ -100,6 +100,35 @@
     nav.addEventListener('focusout', (e) => { if (isOpen() && e.relatedTarget && !nav.contains(e.relatedTarget)) setMenu(false, { restoreFocus: false }); });
   }
 
+  /* Desktop: "Services" opens the picture panel (click, or hover with a mouse) */
+  const megaBtn = document.querySelector('.nav__dd .nav__link');
+  const mega = document.getElementById('nav-mega');
+  if (megaBtn && mega) {
+    const isMega = () => nav.classList.contains('is-mega');
+    const setMega = (open) => {
+      if (open === isMega()) return;
+      nav.classList.toggle('is-mega', open);
+      megaBtn.setAttribute('aria-expanded', String(open));
+      mega.inert = !open;
+    };
+    mega.inert = true;
+    megaBtn.addEventListener('click', () => setMega(!isMega()));
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      let closeTimer = 0;
+      const dd = megaBtn.parentElement;
+      [dd, mega].forEach((el) => {
+        el.addEventListener('mouseenter', () => { clearTimeout(closeTimer); setMega(true); });
+        el.addEventListener('mouseleave', () => { closeTimer = setTimeout(() => setMega(false), 160); });
+      });
+    }
+    mega.addEventListener('click', (e) => { if (e.target.closest('a')) setMega(false); });
+    document.addEventListener('click', (e) => { if (isMega() && !nav.contains(e.target)) setMega(false); });
+    addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isMega()) { setMega(false); megaBtn.focus({ preventScroll: true }); }
+    });
+    nav.addEventListener('focusout', (e) => { if (isMega() && e.relatedTarget && !nav.contains(e.relatedTarget)) setMega(false); });
+  }
+
   /* ---------- 3. Reveal-on-scroll + hero parallax ---------- */
   const revealEls = document.querySelectorAll('.rv');
   if ('IntersectionObserver' in window && !reduceMotion) {
@@ -119,6 +148,39 @@
   } else {
     revealEls.forEach((el) => el.classList.add('in'));
   }
+
+  /* Videos start below the nav bar. The strip above them is painted with the
+     video's own top-edge colours (sampled left → right), so there is no band. */
+  const edgeCanvas = document.createElement('canvas');
+  edgeCanvas.width = 24;
+  edgeCanvas.height = 1;
+  const edgeCtx = edgeCanvas.getContext('2d', { willReadFrequently: true });
+  VSQC.sampleEdge = (video, target) => {
+    if (!edgeCtx || video.readyState < 2 || !video.videoWidth) return;
+    try {
+      // The part of the video that is on screen, and where it sits in `target`
+      const r = video.getBoundingClientRect(), t = target.getBoundingClientRect();
+      const x0 = Math.max(r.left, t.left), x1 = Math.min(r.right, t.right);
+      if (x1 <= x0 || !t.width) return;
+      const vw = video.videoWidth;
+      const sx = ((x0 - r.left) / r.width) * vw, sw = ((x1 - x0) / r.width) * vw;
+      edgeCtx.drawImage(video, sx, 0, sw, 2, 0, 0, 24, 1);   // the very top rows only
+      const d = edgeCtx.getImageData(0, 0, 24, 1).data;
+      const stops = [];
+      for (let i = 0; i < 24; i++) {
+        const at = ((x0 - t.left + (i / 23) * (x1 - x0)) / t.width) * 100;
+        stops.push(`rgb(${d[i * 4]}, ${d[i * 4 + 1]}, ${d[i * 4 + 2]}) ${at.toFixed(1)}%`);
+      }
+      target.style.setProperty('--edge', `linear-gradient(90deg, ${stops.join(', ')})`);
+    } catch (e) { /* canvas blocked: keep the plain page colour */ }
+  };
+  document.querySelectorAll('.phero__video').forEach((v) => {
+    const media = v.closest('.phero__media');
+    const sample = () => VSQC.sampleEdge(v, media);
+    v.addEventListener('loadeddata', sample);
+    v.addEventListener('seeked', sample);
+    sample();
+  });
 
   const parallax = document.querySelector('[data-parallax]');
   const pheroInner = document.querySelector('.phero__inner');

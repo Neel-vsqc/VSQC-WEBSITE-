@@ -28,6 +28,7 @@ def svc_url(s):
 #            href                   label           key
 NAV = [
     ("index.html", "Home", "home"),
+    ("index.html#about", "About", "about"),
     ("index.html#services", "Services", "services"),
     ("portal.html", "Portal", "portal"),
     ("achievements.html", "Achievements", "achievements"),
@@ -49,14 +50,33 @@ def head(title, desc, preload=""):
   <meta name="theme-color" content="#030C18">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   {preload}
   <link rel="stylesheet" href="styles.css">
 </head>"""
 
 
+#             key             label
+BAR_LINKS = [("portal", "Portal"), ("achievements", "Achievements"), ("team", "Team"), ("policies", "Policies")]
+
+
 def header(active, home=False):
-    """Centred glass pill (logo · Contact · Menu). All links live in the menu panel."""
+    """Centred glass pill. Desktop: logo · links (Services opens a picture panel) · Contact.
+    Phones: logo · Menu, and every link lives in the menu panel."""
+    svc_cur = ' aria-current="page"' if active == "services" or active.startswith("service-") else ""
+    home_link = ('<a class="nav__link" href="#top" data-nav="home" aria-current="page" data-scroll-step="-1">Home</a>' if home
+                 else '<a class="nav__link" href="index.html" data-nav="home">Home</a>')
+    about_href = "#about" if home else "index.html#about"
+    bar_links = [f'<li>{home_link}</li>', f'<li><a class="nav__link" href="{about_href}" data-nav="about">About</a></li>', f'<li class="nav__dd"><button class="nav__link" type="button" data-nav="services" aria-expanded="false" aria-controls="nav-mega"{svc_cur}>Services <svg class="nav__chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4"/></svg></button></li>']
+    for key, label in BAR_LINKS:
+        cur = ' aria-current="page"' if key == active else ""
+        bar_links.append(f'<li><a class="nav__link" href="{key}.html" data-nav="{key}"{cur}>{label}</a></li>')
+    tiles = []
+    for n, s in enumerate(SERVICES, 1):
+        cur = ' aria-current="page"' if active == f"service-{s['slug']}" else ""
+        tiles.append(f'<li><a class="nav__tile" href="{svc_url(s)}" style="--img: url(\'poster-{s["loop"]}.jpg\')"{cur}><b>{n:02d}</b><span>{e(s["short"])}</span></a></li>')
+    all_href = '#services" data-scroll-step="0' if home else "index.html#services"
+    tiles.append(f'<li><a class="nav__tile nav__tile--all" href="{all_href}"><b>All {len(SERVICES)}</b><span>View all services <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></span></a></li>')
     i = 0
     main_links = []
     for href, label, key in NAV:
@@ -65,6 +85,8 @@ def header(active, home=False):
             href, extra = "#services", ' data-scroll-step="0"'
         elif home and key == "home":
             href, extra = "#top", ' data-scroll-step="-1"'
+        elif home and key == "about":
+            href = "#about"
         cur = ' aria-current="page"' if key == active else ""
         main_links.append(f'<li class="menu__item" style="--i:{i}"><a class="menu__link" href="{href}" data-nav="{key}"{cur}{extra}>{label}</a></li>')
         i += 1
@@ -80,10 +102,14 @@ def header(active, home=False):
     <div class="nav__shell">
       <div class="nav__bar glass" data-glass>
         <a class="nav__logo" href="index.html" aria-label="VSQC home">VSQC</a>
+        <ul class="nav__links">{''.join(bar_links)}</ul>
         <a class="nav__cta" href="contact.html">Contact</a>
         <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
           <span class="nav__burger" aria-hidden="true"><i></i><i></i><i></i></span>
         </button>
+      </div>
+      <div class="nav__mega glass" id="nav-mega" aria-label="Services">
+        <ul class="nav__tiles">{''.join(tiles)}</ul>
       </div>
       <nav class="menu glass" id="menu" aria-label="Site">
         <p class="menu__label">Explore</p>

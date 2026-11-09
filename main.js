@@ -5,7 +5,7 @@
    2. VideoStage        swaps 4 stacked <video> layers, never blank
    3. Scroll controller maps scroll position → step (-1 = hero, 0–6)
    4. Text              word-split titles, enter / leave classes
-   5. Camera            subtle 3D dolly + pointer tilt on the video
+   5. Edge colour       blends the strip above the video
    6. Nav, menu, smooth scroll, visibility
    ================================================================ */
 (() => {
@@ -19,8 +19,9 @@
                 clip-15 service 7 loop
      --------------------------------------------------------------- */
   const CONFIG = {
-    transitionRate: 2.6,  // transition clips are 10 s slow morphs → ~3.8 s on screen
-    catchUpRate: 5,       // if the user scrolls on mid-transition, finish it quickly
+    transitionRate: 2.2,  // transition clips are 10 s slow morphs → ~4.5 s on screen (faster drops frames = judder)
+    catchUpRate: 3.5,     // if the user scrolls on mid-transition, finish it quickly
+    snapGap: 220,         // ms of wheel silence that ends one scroll gesture (one gesture = one step)
     textDelay: 0.3,       // s after a transition starts that the new text slides in
     startBlend: 0.3,      // tiny blend from a mid-loop frame into a transition's first frame
     crossfade: 0.7,       // backward / multi-step jumps (spec: 0.6–0.8 s)
@@ -32,7 +33,6 @@
   const transitionClipFor = (step) => 2 + step * 2; // transition INTO `step`
 
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
 
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -243,6 +243,7 @@
   const camera = document.getElementById('camera');
   const hero = document.getElementById('hero');
   const ui = document.getElementById('services-ui');
+  const aboutEl = document.getElementById('about');
   const articles = [...document.querySelectorAll('.svc')];
   const STEPS = articles.length;
 
@@ -312,8 +313,11 @@
     ui.style.setProperty('--ui', uiO.toFixed(3));
     ui.classList.toggle('is-on', uiO > 0.5);
 
-    // Glass nav: "Services" is active while the showcase is pinned, "Home" otherwise
-    const navKey = p >= 0.5 && p < STEPS + 0.5 ? 'services' : 'home';
+    // Glass nav: "Services" while the showcase is pinned, "About" while the About
+    // section crosses the middle of the screen, "Home" otherwise
+    const ab = aboutEl && aboutEl.getBoundingClientRect();
+    const navKey = p >= 0.5 && p < STEPS + 0.5 ? 'services'
+      : ab && ab.top < innerHeight / 2 && ab.bottom > innerHeight / 2 ? 'about' : 'home';
     if (navKey !== state.nav && window.VSQC && VSQC.setNav) { state.nav = navKey; VSQC.setNav(navKey); }
 
     const step = p < 0.5 ? -1 : clamp(Math.floor(p - 0.5), 0, STEPS - 1);
@@ -358,6 +362,66 @@
     }
   }
 
+  /* One scroll gesture = one step. Inside the showcase, wheel / swipe / keys
+     move exactly one service (or hero ↔ service 1); a gesture keeps the page
+     locked until it ends, so trackpad inertia can't skip ahead. Scrolling up
+     from the hero or down past the last service scrolls the page normally. */
+  const snap = { busyUntil: 0, lastWheel: 0, used: false, touchY: null };
+  const nearestStep = () => {
+    const p = -showcase.getBoundingClientRect().top / stageEl.offsetHeight;
+    return p < -0.05 || p > STEPS + 0.05 ? null : clamp(Math.round(p) - 1, -1, STEPS - 1);
+  };
+  // Returns true when the gesture belongs to the showcase (caller blocks native scroll)
+  function snapStep(dir) {
+    if (reduceMotion.matches) return false;
+    const from = nearestStep();
+    if (from === null) return false;
+    const to = from + dir;
+    if (to < -1 || to > STEPS - 1) return false;       // leave the showcase normally
+    const now = performance.now();
+    if (now < snap.busyUntil || snap.used) return true;  // still moving / same gesture
+    snap.used = true;
+    snap.busyUntil = now + 1100;
+    scrollToStep(to);
+    return true;
+  }
+  addEventListener('wheel', (e) => {
+    if (e.ctrlKey || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;   // pinch-zoom / sideways
+    const now = performance.now();
+    if (now - snap.lastWheel > CONFIG.snapGap) {                       // a new gesture began
+      snap.used = false;
+      snap.startedOutside = nearestStep() === null;
+    }
+    snap.lastWheel = now;
+    // A gesture that scrolled in from outside the showcase only lands; the next one steps
+    if (snap.startedOutside && nearestStep() !== null) snap.used = true;
+    if (snapStep(Math.sign(e.deltaY))) { e.preventDefault(); e.stopPropagation(); }
+  }, { passive: false, capture: true });
+
+  addEventListener('touchstart', (e) => { snap.touchY = e.touches[0].clientY; snap.used = false; }, { passive: true });
+  addEventListener('touchmove', (e) => {
+    if (snap.touchY === null) return;
+    const dy = snap.touchY - e.touches[0].clientY;
+    const from = nearestStep();
+    if (from === null || reduceMotion.matches) return;
+    const to = from + Math.sign(dy);
+    if (dy && to >= -1 && to <= STEPS - 1) {
+      e.preventDefault();                                 // the showcase owns this swipe
+      if (Math.abs(dy) > 40) snapStep(Math.sign(dy));
+    }
+  }, { passive: false });
+  addEventListener('touchend', () => { snap.touchY = null; }, { passive: true });
+
+  addEventListener('keydown', (e) => {
+    if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable]')) return;
+    if (document.getElementById('nav').classList.contains('is-open')) return;
+    const down = ['ArrowDown', 'PageDown', ' '].includes(e.key) && !e.shiftKey;
+    const up = ['ArrowUp', 'PageUp'].includes(e.key) || (e.key === ' ' && e.shiftKey);
+    if (!down && !up) return;
+    snap.used = false;
+    if (snapStep(down ? 1 : -1)) e.preventDefault();
+  });
+
   document.querySelectorAll('[data-scroll-step]').forEach((a) =>
     a.addEventListener('click', (e) => {
       e.preventDefault();
@@ -367,33 +431,16 @@
   );
 
   /* ---------------------------------------------------------------
-     5. Camera — slow dolly-in as the hero hands over, plus a gentle
-        pointer-driven tilt. Transform only (GPU), smoothed per frame.
+     5. Edge colour — the picture starts below the nav bar (CSS). The
+        strip above it is painted with the showing video's top-edge
+        colours, re-sampled a few times a second because transitions
+        morph them. No camera tilt / zoom: both made the video shake
+        and showed its edges.
      --------------------------------------------------------------- */
-  const cam = { x: 0, y: 0, tx: 0, ty: 0 };
-  addEventListener('pointermove', (e) => {
-    if (!finePointer.matches || reduceMotion.matches) return;
-    cam.tx = e.clientX / innerWidth - 0.5;
-    cam.ty = e.clientY / innerHeight - 0.5;
-  }, { passive: true });
-
-  const ease = (t) => 1 - Math.pow(1 - t, 3);
-  const narrow = matchMedia('(max-width: 820px)');
-  const pullbackFor = () => (narrow.matches ? 0.1 : 0.07);
-  let camPullback = pullbackFor();
-  narrow.addEventListener('change', () => { camPullback = pullbackFor(); });
-  function tick() {
-    if (stage.active && !reduceMotion.matches) {
-      cam.x += (cam.tx - cam.x) * 0.045;
-      cam.y += (cam.ty - cam.y) * 0.045;
-      // Camera pulls back a touch as the hero hands over, so tall towers clear the nav
-      const s = 1 - camPullback * ease(heroP);
-      camera.style.transform =
-        `translate3d(${(-cam.x * 16).toFixed(2)}px, ${(-cam.y * 10).toFixed(2)}px, 0) ` +
-        `rotateY(${(cam.x * 2.2).toFixed(3)}deg) rotateX(${(-cam.y * 1.5).toFixed(3)}deg) scale(${s.toFixed(4)})`;
-    }
-    requestAnimationFrame(tick);
-  }
+  const media = stageEl.querySelector('.stage__media');
+  setInterval(() => {
+    if (stage.active && stage.front && window.VSQC && VSQC.sampleEdge) VSQC.sampleEdge(stage.front.el, media);
+  }, 250);
 
   /* ---------------------------------------------------------------
      6. Visibility + start-up (nav, menu and smooth scroll live in site.js)
@@ -417,6 +464,13 @@
     if (lenis) lenis.scrollTo(y, { immediate: true, force: true });
     else scrollTo(0, y);
   }
+  // …and via index.html#about → the About section, just under the nav bar
+  if (location.hash === '#about' && aboutEl) {
+    history.replaceState(null, '', location.pathname);
+    const y = aboutEl.getBoundingClientRect().top + scrollY - 80;
+    const lenis = window.VSQC && VSQC.lenis;
+    if (lenis) lenis.scrollTo(y, { immediate: true, force: true });
+    else scrollTo(0, y);
+  }
   onScroll();
-  requestAnimationFrame(tick);
 })();
