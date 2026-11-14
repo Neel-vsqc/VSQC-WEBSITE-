@@ -44,12 +44,12 @@ def head(title, desc, preload=""):
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>{e(title)}</title>
   <meta name="description" content="{e(desc)}">
-  <meta name="theme-color" content="#030C18">
+  <meta name="theme-color" content="#0F2440">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Roboto+Serif:opsz,wdth,wght@8..144,75,400&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
   {preload}
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20261114">
 </head>"""
 
 
@@ -276,7 +276,11 @@ def write(name, html):
 # ------------------------------------------------------------------
 # HOME
 # ------------------------------------------------------------------
-SYSTEMETA_LEAD = "Systemeta brings audits, documents, KPIs and risk into one place, with AI-based analysis. Clients and employees access it through the VSQC Portal."
+SYSTEMETA_PRODUCTS = [   # (anchor, name, short description) — descriptions to come
+    ("audito", "Audito", "Details coming soon."),
+    ("erp", "ERP", "Details coming soon."),
+]
+SYSTEMETA_LEAD ="Systemeta brings audits, documents, KPIs and risk into one place, with AI-based analysis. Clients and employees access it through the VSQC Portal."
 
 
 def more(href, label):
@@ -405,6 +409,11 @@ def build_home():
     </section>
     <section class="sec home-sec" id="systemeta">
       {sec_head('Systemeta', 'Your management system, <em>in one place</em>', SYSTEMETA_LEAD)}
+      <ol class="items">{''.join(f'''<li class="item rv">
+          <span class="item__num">{i:02d}</span>
+          <h3 class="item__title"><a href="systemeta.html#{slug}">{name} <em>by Systemeta</em></a></h3>
+          <p class="item__desc">{desc}</p>
+        </li>''' for i, (slug, name, desc) in enumerate(SYSTEMETA_PRODUCTS, 1))}</ol>
       {more('systemeta.html', 'Learn more about Systemeta')}
     </section>
     {logos_block(id_='clients', more_html=more('clients.html', 'See all clients'))}
@@ -648,10 +657,10 @@ def build_systemeta():
     html = head("Systemeta — VSQC", "Systemeta brings audits, documents, KPIs and risk into one place, with AI-based analysis.") + header("systemeta") + f"""
   <main>
     {plain_hero('Systemeta', 'Your management system, <em>in one place</em>', lead)}
-    <!-- CONTENT TO COME: the details of Systemeta -->
-    <section class="sec sec--tight">
-      {sec_head('Coming soon', 'More about Systemeta, <em>soon</em>', 'This section is ready for the Systemeta details.')}
-    </section>
+    <!-- CONTENT TO COME: the details of each Systemeta product -->
+    {''.join(f'''<section class="sec home-sec" id="{slug}">
+      {sec_head(f'{i:02d} · Systemeta', f'{name} <em>by Systemeta</em>', desc)}
+    </section>''' for i, (slug, name, desc) in enumerate(SYSTEMETA_PRODUCTS, 1))}
   </main>
 """ + footer()
     write("systemeta.html", html)
@@ -783,7 +792,7 @@ def build_404():
   </main>
 """ + footer()
     # absolute asset paths so the 404 page also renders under nested URLs
-    html = html.replace('href="styles.css"', 'href="/styles.css"').replace('src="site.js"', 'src="/site.js"')
+    html = html.replace('href="styles.css?v=20261114"', 'href="/styles.css?v=20261114"').replace('src="site.js"', 'src="/site.js"')
     write("404.html", html)
 
 
