@@ -56,7 +56,7 @@
 
   // Lets the home page mark "Services" active while the showcase is on screen
   VSQC.setNav = (key) => {
-    document.querySelectorAll('.menu__link[data-nav], .nav__link[data-nav]').forEach((a) => {
+    document.querySelectorAll('.menu__link[data-nav], .nav__link[data-nav], .nav__cta[data-nav]').forEach((a) => {
       if (a.dataset.nav === key) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
     });
@@ -100,7 +100,8 @@
     nav.addEventListener('focusout', (e) => { if (isOpen() && e.relatedTarget && !nav.contains(e.relatedTarget)) setMenu(false, { restoreFocus: false }); });
   }
 
-  /* Desktop: "Services" opens the picture panel (click, or hover with a mouse) */
+  /* Desktop: hovering "Services" opens the services list with a live preview.
+     Clicking "Services" goes straight to service 01 on the home page. */
   const megaBtn = document.querySelector('.nav__dd .nav__link');
   const mega = document.getElementById('nav-mega');
   if (megaBtn && mega) {
@@ -112,8 +113,13 @@
       mega.inert = !open;
     };
     mega.inert = true;
-    megaBtn.addEventListener('click', () => setMega(!isMega()));
-    if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    megaBtn.addEventListener('click', (e) => {
+      // touch screens: first tap opens the list, a second tap follows the link
+      if (!fine && !isMega()) { e.preventDefault(); e.stopImmediatePropagation(); setMega(true); return; }
+      setMega(false);
+    });
+    if (fine) {
       let closeTimer = 0;
       const dd = megaBtn.parentElement;
       [dd, mega].forEach((el) => {
@@ -396,16 +402,20 @@
 (() => {
   const show = document.querySelector('.showcase');
   [...document.querySelectorAll('main > section')].filter((s) => s !== show)
-    .forEach((s, i) => { s.dataset.tone = i % 2 === 0 ? 'light' : 'dark'; });
+    /* home: the services end on a light screen, so the sections below start dark */
+    .forEach((s, i) => { s.dataset.tone = (i + (show ? 1 : 0)) % 2 === 0 ? 'light' : 'dark'; });
 
   const stage = document.getElementById('stage');
   if (!show || !stage) return;
   const n = show.querySelectorAll('.svc').length;
   const tick = () => {
+    if (!stage.offsetHeight) return;   /* not laid out yet */
     const p = -show.getBoundingClientRect().top / stage.offsetHeight;
     const step = p < 0.5 ? -1 : Math.min(n - 1, Math.floor(p - 0.5));
-    const theme = step === -1 || step % 2 === 1 ? 'light' : 'dark';
+    /* light: hero, 02, 04, 06 and 07 (Health & Safety, green) */
+    const theme = step === -1 || step % 2 === 1 || step === n - 1 ? 'light' : 'dark';
     if (show.dataset.theme !== theme) show.dataset.theme = theme;
+    if (show.dataset.step !== String(step + 1)) show.dataset.step = step + 1;   /* 0 = hero, 1 = service 01 … */
   };
   tick();
   addEventListener('scroll', tick, { passive: true });

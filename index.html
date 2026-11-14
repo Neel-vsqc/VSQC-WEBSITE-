@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#030C18">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Roboto+Serif:opsz,wdth,wght@8..144,75,400&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="0-hero.png">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -18,18 +18,20 @@
     <div class="nav__shell">
       <div class="nav__bar glass" data-glass>
         <a class="nav__logo" href="index.html" aria-label="VSQC home">VSQC</a>
-        <ul class="nav__links"><li><a class="nav__link" href="#top" data-nav="home" aria-current="page" data-scroll-step="-1">Home</a></li><li><a class="nav__link" href="#about" data-nav="about">About</a></li><li class="nav__dd"><button class="nav__link" type="button" data-nav="services" aria-expanded="false" aria-controls="nav-mega">Services <svg class="nav__chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4"/></svg></button></li><li><a class="nav__link" href="portal.html" data-nav="portal">Portal</a></li><li><a class="nav__link" href="achievements.html" data-nav="achievements">Achievements</a></li><li><a class="nav__link" href="team.html" data-nav="team">Team</a></li><li><a class="nav__link" href="policies.html" data-nav="policies">Policies</a></li></ul>
-        <a class="nav__cta" href="contact.html">Contact</a>
+        <ul class="nav__links"><li><a class="nav__link" href="#top" data-scroll-step="-1" data-nav="home" aria-current="page">Home</a></li><li class="nav__dd"><a class="nav__link" href="#services" data-scroll-step="0" data-nav="services" aria-expanded="false" aria-controls="nav-mega">Services <svg class="nav__chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4"/></svg></a></li><li><a class="nav__link" href="#about" data-nav="about">About</a></li><li><a class="nav__link" href="#achievements" data-nav="achievements">Achievements</a></li><li><a class="nav__link" href="#systemeta" data-nav="systemeta">Systemeta</a></li><li><a class="nav__link" href="#clients" data-nav="clients">Clients</a></li><li><a class="nav__link" href="#team" data-nav="team">Team</a></li></ul>
+        <a class="nav__cta" href="#contact" data-nav="contact">Contact</a>
         <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
           <span class="nav__burger" aria-hidden="true"><i></i><i></i><i></i></span>
         </button>
       </div>
       <div class="nav__mega glass" id="nav-mega" aria-label="Services">
-        <ul class="nav__tiles"><li><a class="nav__tile" href="service-iso.html" style="--img: url('poster-3.jpg')"><b>01</b><span>ISO &amp; Audits</span></a></li><li><a class="nav__tile" href="service-esg.html" style="--img: url('poster-5.jpg')"><b>02</b><span>ESG &amp; Sustainability</span></a></li><li><a class="nav__tile" href="service-vendor.html" style="--img: url('poster-7.jpg')"><b>03</b><span>Vendor Development</span></a></li><li><a class="nav__tile" href="service-training.html" style="--img: url('poster-9.jpg')"><b>04</b><span>Training &amp; Mentorship</span></a></li><li><a class="nav__tile" href="service-digital.html" style="--img: url('poster-11.jpg')"><b>05</b><span>Digital Transformation</span></a></li><li><a class="nav__tile" href="service-infosec.html" style="--img: url('poster-13.jpg')"><b>06</b><span>Information Security</span></a></li><li><a class="nav__tile" href="service-safety.html" style="--img: url('poster-15.jpg')"><b>07</b><span>Health &amp; Safety</span></a></li><li><a class="nav__tile nav__tile--all" href="#services" data-scroll-step="0"><b>All 7</b><span>View all services <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></span></a></li></ul>
+        <p class="svcmenu__label">Our services</p>
+        <ol class="svcmenu__list"><li><a class="svcmenu__item" href="service-iso.html"><span class="svcmenu__n">01</span><span class="svcmenu__name">ISO &amp; Audits</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li><li><a class="svcmenu__item" href="service-esg.html"><span class="svcmenu__n">02</span><span class="svcmenu__name">ESG &amp; Sustainability</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li><li><a class="svcmenu__item" href="service-vendor.html"><span class="svcmenu__n">03</span><span class="svcmenu__name">Vendor Development</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li><li><a class="svcmenu__item" href="service-training.html"><span class="svcmenu__n">04</span><span class="svcmenu__name">Training &amp; Mentorship</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li><li><a class="svcmenu__item" href="service-digital.html"><span class="svcmenu__n">05</span><span class="svcmenu__name">Digital Transformation</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li><li><a class="svcmenu__item" href="service-infosec.html"><span class="svcmenu__n">06</span><span class="svcmenu__name">Information Security</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li><li><a class="svcmenu__item" href="service-safety.html"><span class="svcmenu__n">07</span><span class="svcmenu__name">Health &amp; Safety</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li></ol>
+        <a class="svcmenu__all" href="#services" data-scroll-step="0"><span>See all 7 services, one by one</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a>
       </div>
       <nav class="menu glass" id="menu" aria-label="Site">
         <p class="menu__label">Explore</p>
-        <ul class="menu__list"><li class="menu__item" style="--i:0"><a class="menu__link" href="#top" data-nav="home" aria-current="page" data-scroll-step="-1">Home</a></li><li class="menu__item" style="--i:1"><a class="menu__link" href="#about" data-nav="about">About</a></li><li class="menu__item" style="--i:2"><a class="menu__link" href="#services" data-nav="services" data-scroll-step="0">Services</a></li><li class="menu__item" style="--i:3"><a class="menu__link" href="portal.html" data-nav="portal">Portal</a></li><li class="menu__item" style="--i:4"><a class="menu__link" href="achievements.html" data-nav="achievements">Achievements</a></li><li class="menu__item" style="--i:5"><a class="menu__link" href="policies.html" data-nav="policies">Policies</a></li><li class="menu__item" style="--i:6"><a class="menu__link" href="team.html" data-nav="team">Team</a></li><li class="menu__item" style="--i:7"><a class="menu__link" href="contact.html" data-nav="contact">Contact</a></li></ul>
+        <ul class="menu__list"><li class="menu__item" style="--i:0"><a class="menu__link" href="#top" data-scroll-step="-1" data-nav="home" aria-current="page">Home</a></li><li class="menu__item" style="--i:1"><a class="menu__link" href="#services" data-scroll-step="0" data-nav="services">Services</a></li><li class="menu__item" style="--i:2"><a class="menu__link" href="#about" data-nav="about">About</a></li><li class="menu__item" style="--i:3"><a class="menu__link" href="#achievements" data-nav="achievements">Achievements</a></li><li class="menu__item" style="--i:4"><a class="menu__link" href="#systemeta" data-nav="systemeta">Systemeta</a></li><li class="menu__item" style="--i:5"><a class="menu__link" href="#clients" data-nav="clients">Clients</a></li><li class="menu__item" style="--i:6"><a class="menu__link" href="#team" data-nav="team">Team</a></li><li class="menu__item" style="--i:7"><a class="menu__link" href="#contact" data-nav="contact">Contact</a></li></ul>
         <hr class="menu__rule">
         <p class="menu__label">Services</p>
         <ul class="menu__list menu__list--small"><li class="menu__item" style="--i:8"><a class="menu__link" href="service-iso.html">ISO &amp; Audits</a></li><li class="menu__item" style="--i:9"><a class="menu__link" href="service-esg.html">ESG &amp; Sustainability</a></li><li class="menu__item" style="--i:10"><a class="menu__link" href="service-vendor.html">Vendor Development</a></li><li class="menu__item" style="--i:11"><a class="menu__link" href="service-training.html">Training &amp; Mentorship</a></li><li class="menu__item" style="--i:12"><a class="menu__link" href="service-digital.html">Digital Transformation</a></li><li class="menu__item" style="--i:13"><a class="menu__link" href="service-infosec.html">Information Security</a></li><li class="menu__item" style="--i:14"><a class="menu__link" href="service-safety.html">Health &amp; Safety</a></li></ul>
@@ -41,7 +43,7 @@
 
   <main id="content">
     <!-- SHOWCASE = HERO + SERVICES. .stage is sticky for the whole section. -->
-    <section class="showcase" id="top" data-theme="light" style="--steps: 7">
+    <section class="showcase" id="top" data-theme="light" data-step="0" style="--steps: 7">
       <div class="stage" id="stage">
         <div class="stage__media" aria-hidden="true">
           <div class="stage__camera" id="camera">
@@ -169,7 +171,40 @@
       </div>
     </section>
     
-  <section class="logos" aria-label="Clients, partners and standards">
+    <!-- The rest of the site, in nav order. Each block links to its full page. -->
+    <section class="sec home-sec" id="achievements">
+      
+    <header class="sec__head">
+      <p class="eyebrow rv"><span class="hairline"></span>Track record</p>
+      <h2 class="sec__title rv">Achievements, <em>clients</em> and credentials</h2>
+      
+    </header>
+      <ol class="items"><li class="item rv">
+          <span class="item__num">01</span>
+          <h3 class="item__title">Case Studies &amp; Multisite Certifications</h3>
+          <p class="item__desc">Detailed insights into our successful projects, including complex multi-site, multi-standard certifications. See how we drive compliance at scale.</p>
+        </li>
+<li class="item rv">
+          <span class="item__num">02</span>
+          <h3 class="item__title">Client Testimonials</h3>
+          <p class="item__desc">Hear directly from industry leaders like Tata Realty and Gemsons Precision about their experience with VSQC. Proven success from satisfied partners.</p>
+        </li>
+<li class="item rv">
+          <span class="item__num">03</span>
+          <h3 class="item__title">Our Certifications and Accreditation</h3>
+          <p class="item__desc">We are a trusted Consulting Partner with top-tier certification bodies like TUV-R, BSI, and LRQA. We hold our own ISO 9001:2026 and ISO 27001:2022 certifications.</p>
+        </li></ol>
+      <div class="sec__more rv"><a class="btn btn--line" href="achievements.html">See all achievements <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></div>
+    </section>
+    <section class="sec home-sec" id="systemeta">
+    <header class="sec__head">
+      <p class="eyebrow rv"><span class="hairline"></span>Systemeta</p>
+      <h2 class="sec__title rv">Your management system, <em>in one place</em></h2>
+      <p class="sec__note rv">Systemeta brings audits, documents, KPIs and risk into one place, with AI-based analysis. Clients and employees access it through the VSQC Portal.</p>
+    </header>
+      <div class="sec__more rv"><a class="btn btn--line" href="systemeta.html">Learn more about Systemeta <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></div>
+    </section>
+  <section class="logos home-sec" id="clients" aria-label="Clients, partners and standards">
     <div class="logos__head">
       <div>
         <p class="eyebrow rv"><span class="hairline"></span>Clients &amp; partners</p>
@@ -189,69 +224,71 @@
         <ul class="marquee__list" aria-hidden="true"><li class="chip"><b>ISO 9001</b><span>Quality Management System</span></li><li class="chip"><b>ISO 13485</b><span>Medical Device Management</span></li><li class="chip"><b>ISO 14001</b><span>Environment Management Systems</span></li><li class="chip"><b>ISO 14064</b><span>Greenhouse Gas (GHG)</span></li><li class="chip"><b>ISO 17025</b><span>Laboratory Management Systems</span></li><li class="chip"><b>ISO 19443</b><span>Nuclear Quality Management System</span></li><li class="chip"><b>ISO 20000-1</b><span>IT Service Management System</span></li><li class="chip"><b>ISO 20121</b><span>Event Sustainability Management Systems</span></li><li class="chip"><b>ISO 21001</b><span>Education Organisation Management System</span></li><li class="chip"><b>ISO 22000</b><span>Food Safety Management Systems</span></li><li class="chip"><b>ISO 22163</b><span>Railways Management Systems</span></li><li class="chip"><b>ISO 22301</b><span>Business Continuity Management Systems</span></li><li class="chip"><b>ISO 26000</b><span>Social Responsibility</span></li><li class="chip"><b>ISO 27001</b><span>Information Security Management Systems</span></li><li class="chip"><b>ISO 27017</b><span>Information Security for Cloud Service Providers</span></li><li class="chip"><b>ISO 27018</b><span>Data Privacy for Cloud Providers</span></li><li class="chip"><b>ISO 27701</b><span>Privacy Information Management Systems</span></li><li class="chip"><b>ISO 28000</b><span>Logistics Security Management Systems</span></li><li class="chip"><b>ISO 29001</b><span>Petroleum Quality Management Systems</span></li><li class="chip"><b>ISO 30414</b><span>Human Resource Management Systems</span></li><li class="chip"><b>ISO 31000</b><span>Risk Management Systems</span></li><li class="chip"><b>ISO 37001</b><span>Antibribery Management Systems</span></li><li class="chip"><b>ISO 37301</b><span>Compliance Management Systems</span></li><li class="chip"><b>ISO 39001</b><span>Road Traffic Safety Management Systems</span></li><li class="chip"><b>ISO 41001</b><span>Facility Management Systems</span></li><li class="chip"><b>ISO 45001</b><span>Occupational Health &amp; Safety Management Systems</span></li><li class="chip"><b>ISO 50001</b><span>Energy Management Systems</span></li><li class="chip"><b>ISO 55001</b><span>Asset Management Systems</span></li><li class="chip"><b>AS 9100</b><span>Aerospace Management Systems</span></li><li class="chip"><b>IATF 16949</b><span>Automotive Quality Management Systems</span></li><li class="chip"><b>TL 9000</b><span>Telecommunication Management System</span></li><li class="chip"><b>SA 8000</b><span>Social Accountability Management Systems</span></li><li class="chip"><b>RJC</b><span>Responsible Jewellery Council</span></li><li class="chip"><b>BEC 1500</b><span>Human Rights Management</span></li><li class="chip"><b>BEC 100</b><span>Housekeeping Management Systems</span></li><li class="chip"><b>NABH</b><span>Accreditation for Hospitals</span></li><li class="chip"><b>BPR</b><span>Business Process Restructuring</span></li></ul>
       </div>
     </div>
+      <div class="sec__more rv"><a class="btn btn--line" href="clients.html">See all clients <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></div>
   </section>
-
-    <!-- ALL SERVICES (quiet text index) -->
-    <section class="sec sec--tight">
-      
+    <section class="sec sec--split home-sec" id="team">
+      <div>
     <header class="sec__head">
-      <p class="eyebrow rv"><span class="hairline"></span>All services</p>
-      <h2 class="sec__title rv">Seven practices, <em>one partner</em></h2>
-      <p class="sec__note rv">Explore our diverse range of specialized services designed to elevate your business operations. From ISO consultancy, sustainability to cybersecurity, find the right solutions for your specific industry needs.</p>
-    </header>
-      <ol class="idx">
-        <li class="idx__row rv"><a href="service-iso.html"><span class="idx__num">01</span><span class="idx__title">Management System &amp; ISO Consultancy &amp; Audits</span><span class="idx__desc">From gap assessment to certification, across 35+ standards.</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li><li class="idx__row rv"><a href="service-esg.html"><span class="idx__num">02</span><span class="idx__title">ESG / Sustainability Implementation Consultancy &amp; Assurance Assessments</span><span class="idx__desc">Build your ESG roadmap, measure impact and report with confidence.</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li><li class="idx__row rv"><a href="service-vendor.html"><span class="idx__num">03</span><span class="idx__title">Vendor Development &amp; Audits</span><span class="idx__desc">Select, train, monitor and rate the vendors you depend on.</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li><li class="idx__row rv"><a href="service-training.html"><span class="idx__num">04</span><span class="idx__title">Training &amp; Mentorship</span><span class="idx__desc">Classroom and online training, from awareness to lead auditor.</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li><li class="idx__row rv"><a href="service-digital.html"><span class="idx__num">05</span><span class="idx__title">Digital Transformation for Management Systems</span><span class="idx__desc">Move your management systems onto AI-supported digital tools.</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li><li class="idx__row rv"><a href="service-infosec.html"><span class="idx__num">06</span><span class="idx__title">Information Security, Data Privacy &amp; Cybersecurity</span><span class="idx__desc">Implement and audit the controls that protect your data.</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li><li class="idx__row rv"><a href="service-safety.html"><span class="idx__num">07</span><span class="idx__title">Health &amp; Safety Implementation &amp; Audits</span><span class="idx__desc">Audits, inspections and risk studies that keep people safe.</span><svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></li>
-      </ol>
+      <p class="eyebrow rv"><span class="hairline"></span>Our team</p>
+      <h2 class="sec__title rv">Consulting partner to leading <em>certification bodies</em></h2>
+      
+    </header></div>
+      <ul class="names rv"><li>TUV-R</li><li>BSI</li><li>LRQA</li></ul>
+      <div class="sec__more rv"><a class="btn btn--line" href="team.html">Meet the team <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></a></div>
     </section>
-
-    <!-- EXPLORE VSQC -->
-    <section class="sec sec--tight">
+    <section class="sec home-sec" id="contact">
       
     <header class="sec__head">
-      <p class="eyebrow rv"><span class="hairline"></span>Explore VSQC</p>
-      <h2 class="sec__title rv">Everything in <em>one place</em></h2>
-      
+      <p class="eyebrow rv"><span class="hairline"></span>Forms</p>
+      <h2 class="sec__title rv">How can we <em>help</em>?</h2>
+      <p class="sec__note rv">Request a quote or share your experience through our online forms. For concerns or complaints, use the secure grievance and whistleblower forms.</p>
     </header>
-      <ol class="idx"><li class="idx__row rv">
-          <a href="portal.html">
-            <span class="idx__num">01</span>
-            <span class="idx__title">VSQC Portal</span>
-            <span class="idx__desc">Access your personalized dashboard to track project progress, audit reports, and compliance metrics. A secure, unified gateway for our clients and team members.</span>
-            <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg>
-          </a>
-        </li>
-<li class="idx__row rv">
-          <a href="achievements.html">
-            <span class="idx__num">02</span>
-            <span class="idx__title">Our Achievements</span>
-            <span class="idx__desc">Discover our track record of successful multi-site certifications and industry breakthroughs. Read how we have transformed businesses through dedication and specialized expertise.</span>
-            <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg>
-          </a>
-        </li>
-<li class="idx__row rv">
-          <a href="policies.html">
-            <span class="idx__num">03</span>
-            <span class="idx__title">Our Policies</span>
-            <span class="idx__desc">Review our foundational commitments to quality, sustainability, and ethical business practices. Our transparent policies reflect our dedication to integrity and continuous improvement.</span>
-            <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg>
-          </a>
-        </li>
-<li class="idx__row rv">
-          <a href="team.html">
-            <span class="idx__num">04</span>
-            <span class="idx__title">Our Team &amp; Partners</span>
-            <span class="idx__desc">Meet the experienced professionals and strategic partners who drive VSQC&#x27;s success. Our multi-disciplinary team brings decades of industry experience to every engagement.</span>
-            <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg>
-          </a>
-        </li>
-<li class="idx__row rv">
-          <a href="contact.html">
-            <span class="idx__num">05</span>
-            <span class="idx__title">Contact Us</span>
-            <span class="idx__desc">Connect with our global offices in India, Sri Lanka, and the UAE for tailored consultancy solutions. Reach out for RFQs, feedback, or to start your compliance journey today.</span>
-            <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg>
-          </a>
-        </li></ol>
+      <div class="tabs rv" role="tablist" aria-label="Contact forms"><button class="tab" role="tab" type="button" id="tab-rfq" aria-controls="panel-rfq" aria-selected="true" data-tab="rfq">Request a quote</button><button class="tab" role="tab" type="button" id="tab-feedback" aria-controls="panel-feedback" aria-selected="false" data-tab="feedback">Feedback</button><button class="tab" role="tab" type="button" id="tab-grievance" aria-controls="panel-grievance" aria-selected="false" data-tab="grievance">Grievance</button><button class="tab" role="tab" type="button" id="tab-whistleblower" aria-controls="panel-whistleblower" aria-selected="false" data-tab="whistleblower">Whistleblower</button></div>
+      <div class="panel" role="tabpanel" id="panel-rfq" aria-labelledby="tab-rfq">
+          <form class="form" data-form="Request for quote" novalidate>
+            <label class="hp" aria-hidden="true">Leave empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+            <label class="field"><span class="field__label">Full name</span><input type="text" name="name" required autocomplete="name"></label>
+            <label class="field"><span class="field__label">Company</span><input type="text" name="company" required autocomplete="organization"></label>
+            <label class="field"><span class="field__label">Work email</span><input type="email" name="email" required autocomplete="email"></label>
+            <label class="field"><span class="field__label">Phone <em>(optional)</em></span><input type="tel" name="phone" autocomplete="tel"></label>
+            <label class="field"><span class="field__label">Service</span><select name="service" required><option value="">Select a service</option><option value="iso">Management System &amp; ISO Consultancy &amp; Audits</option><option value="esg">ESG / Sustainability Implementation Consultancy &amp; Assurance Assessments</option><option value="vendor">Vendor Development &amp; Audits</option><option value="training">Training &amp; Mentorship</option><option value="digital">Digital Transformation for Management Systems</option><option value="infosec">Information Security, Data Privacy &amp; Cybersecurity</option><option value="safety">Health &amp; Safety Implementation &amp; Audits</option></select></label>
+            <label class="field"><span class="field__label">Number of sites <em>(optional)</em></span><input type="number" name="sites" min="1" inputmode="numeric"></label>
+            <label class="field field--full"><span class="field__label">Standards or scope <em>(optional)</em></span><input type="text" name="standards" placeholder="e.g. ISO 9001, ISO 14001, EcoVadis"></label>
+            <label class="field field--full"><span class="field__label">Tell us about your requirement</span><textarea name="message" rows="5" required></textarea></label>
+            <div class="form__foot"><button class="btn btn--solid" type="submit">Send request</button><p class="form__status" role="status" aria-live="polite"></p></div>
+          </form></div><div class="panel" role="tabpanel" id="panel-feedback" aria-labelledby="tab-feedback" hidden>
+          <form class="form" data-form="Feedback" novalidate>
+            <label class="hp" aria-hidden="true">Leave empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+            <label class="field"><span class="field__label">Full name</span><input type="text" name="name" required autocomplete="name"></label>
+            <label class="field"><span class="field__label">Email</span><input type="email" name="email" required autocomplete="email"></label>
+            <label class="field field--full"><span class="field__label">Subject</span><input type="text" name="topic" required></label>
+            <fieldset class="field field--full rating"><legend class="field__label">How was your experience?</legend>
+              <label><input type="radio" name="rating" value="1" required><span>1</span></label><label><input type="radio" name="rating" value="2"><span>2</span></label><label><input type="radio" name="rating" value="3"><span>3</span></label><label><input type="radio" name="rating" value="4"><span>4</span></label><label><input type="radio" name="rating" value="5"><span>5</span></label>
+            </fieldset>
+            <label class="field field--full"><span class="field__label">Your feedback</span><textarea name="message" rows="5" required></textarea></label>
+            <div class="form__foot"><button class="btn btn--solid" type="submit">Send feedback</button><p class="form__status" role="status" aria-live="polite"></p></div>
+          </form></div><div class="panel" role="tabpanel" id="panel-grievance" aria-labelledby="tab-grievance" hidden>
+          <form class="form" data-form="Grievance" novalidate>
+            <label class="hp" aria-hidden="true">Leave empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+            <label class="field"><span class="field__label">Full name</span><input type="text" name="name" required autocomplete="name"></label>
+            <label class="field"><span class="field__label">Email</span><input type="email" name="email" required autocomplete="email"></label>
+            <label class="field"><span class="field__label">Phone <em>(optional)</em></span><input type="tel" name="phone" autocomplete="tel"></label>
+            <label class="field"><span class="field__label">Project or reference <em>(optional)</em></span><input type="text" name="reference"></label>
+            <label class="field field--full"><span class="field__label">Describe your grievance</span><textarea name="message" rows="5" required></textarea></label>
+            <div class="form__foot"><button class="btn btn--solid" type="submit">Submit grievance</button><p class="form__status" role="status" aria-live="polite"></p></div>
+          </form></div><div class="panel" role="tabpanel" id="panel-whistleblower" aria-labelledby="tab-whistleblower" hidden>
+          <form class="form" data-form="Whistleblower report" data-anonymous-form novalidate>
+            <label class="hp" aria-hidden="true">Leave empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+            <label class="check field--full"><input type="checkbox" name="anonymous" data-anonymous> <span>Report anonymously</span></label>
+            <div class="form__identity" data-identity>
+              <label class="field"><span class="field__label">Full name</span><input type="text" name="name" required autocomplete="name"></label>
+              <label class="field"><span class="field__label">Email</span><input type="email" name="email" required autocomplete="email"></label>
+            </div>
+            <label class="field field--full"><span class="field__label">Category</span><select name="category" required><option value="">Select a category</option><option>Bribery or corruption</option><option>Fraud</option><option>Conflict of interest</option><option>Harassment or discrimination</option><option>Health, safety or environment</option><option>Data privacy</option><option>Other</option></select></label>
+            <label class="field field--full"><span class="field__label">What happened? Include dates, places and people if you can.</span><textarea name="message" rows="5" required></textarea></label>
+            <p class="form__note field--full" data-anon-note hidden>Anonymous reports need the secure form service, which is not connected yet. Please share your email for now, or contact VSQC leadership directly.</p>
+            <div class="form__foot"><button class="btn btn--solid" type="submit">Submit report</button><p class="form__status" role="status" aria-live="polite"></p></div>
+          </form></div>
     </section>
   </main>
 

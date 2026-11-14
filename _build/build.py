@@ -25,18 +25,15 @@ def svc_url(s):
 # ------------------------------------------------------------------
 # Shared layout
 # ------------------------------------------------------------------
-#            href                   label           key
+#            key            label
+# Same order as the home page, top to bottom. Home, Services and About are part of
+# the showcase page; the others are home sections (#achievements …) that link to full pages.
 NAV = [
-    ("index.html", "Home", "home"),
-    ("index.html#about", "About", "about"),
-    ("index.html#services", "Services", "services"),
-    ("portal.html", "Portal", "portal"),
-    ("achievements.html", "Achievements", "achievements"),
-    ("policies.html", "Policies", "policies"),
-    ("team.html", "Team", "team"),
-    ("contact.html", "Contact", "contact"),
+    ("home", "Home"), ("services", "Services"), ("about", "About"), ("achievements", "Achievements"),
+    ("systemeta", "Systemeta"), ("clients", "Clients"), ("team", "Team"), ("contact", "Contact"),
 ]
-PAGES = ["portal", "achievements", "policies", "team", "contact"] + [f"service-{s['slug']}" for s in SERVICES]
+# portal.html and policies.html still exist (linked from the footer) but are not in the nav
+PAGES = ["portal", "achievements", "systemeta", "clients", "policies", "team", "contact"] + [f"service-{s['slug']}" for s in SERVICES]
 
 
 def head(title, desc, preload=""):
@@ -50,50 +47,49 @@ def head(title, desc, preload=""):
   <meta name="theme-color" content="#030C18">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Roboto+Serif:opsz,wdth,wght@8..144,75,400&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
   {preload}
   <link rel="stylesheet" href="styles.css">
 </head>"""
 
 
-#             key             label
-BAR_LINKS = [("portal", "Portal"), ("achievements", "Achievements"), ("team", "Team"), ("policies", "Policies")]
-
-
 def header(active, home=False):
-    """Centred glass pill. Desktop: logo · links (Services opens a picture panel) · Contact.
+    """Centred glass pill. Desktop: logo · links · Contact. Hovering Services opens a
+    tidy two-column list of the 7 services; clicking it goes straight to service 01.
     Phones: logo · Menu, and every link lives in the menu panel."""
-    svc_cur = ' aria-current="page"' if active == "services" or active.startswith("service-") else ""
-    home_link = ('<a class="nav__link" href="#top" data-nav="home" aria-current="page" data-scroll-step="-1">Home</a>' if home
-                 else '<a class="nav__link" href="index.html" data-nav="home">Home</a>')
-    about_href = "#about" if home else "index.html#about"
-    bar_links = [f'<li>{home_link}</li>', f'<li><a class="nav__link" href="{about_href}" data-nav="about">About</a></li>', f'<li class="nav__dd"><button class="nav__link" type="button" data-nav="services" aria-expanded="false" aria-controls="nav-mega"{svc_cur}>Services <svg class="nav__chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4"/></svg></button></li>']
-    for key, label in BAR_LINKS:
-        cur = ' aria-current="page"' if key == active else ""
-        bar_links.append(f'<li><a class="nav__link" href="{key}.html" data-nav="{key}"{cur}>{label}</a></li>')
-    tiles = []
+    page = active
+    if active.startswith("service-"):
+        active = "services"
+
+    def cur(k):
+        return ' aria-current="page"' if k == active else ""
+
+    def href(k):
+        if home:
+            return {"home": '#top" data-scroll-step="-1', "services": '#services" data-scroll-step="0'}.get(k, f"#{k}")
+        return "index.html" if k == "home" else f"index.html#{k}"
+
+    bar = []
+    for k, label in NAV:
+        if k == "contact":          # Contact is the button at the end
+            continue
+        a = f'<a class="nav__link" href="{href(k)}" data-nav="{k}"{cur(k)}'
+        if k == "services":
+            bar.append(f'<li class="nav__dd">{a} aria-expanded="false" aria-controls="nav-mega">Services <svg class="nav__chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4"/></svg></a></li>')
+        else:
+            bar.append(f"<li>{a}>{label}</a></li>")
+    items = []
     for n, s in enumerate(SERVICES, 1):
-        cur = ' aria-current="page"' if active == f"service-{s['slug']}" else ""
-        tiles.append(f'<li><a class="nav__tile" href="{svc_url(s)}" style="--img: url(\'poster-{s["loop"]}.jpg\')"{cur}><b>{n:02d}</b><span>{e(s["short"])}</span></a></li>')
+        c = ' aria-current="page"' if page == f"service-{s['slug']}" else ""
+        items.append(f'<li><a class="svcmenu__item" href="{svc_url(s)}"{c}><span class="svcmenu__n">{n:02d}</span><span class="svcmenu__name">{e(s["short"])}</span>{ARROW}</a></li>')
     all_href = '#services" data-scroll-step="0' if home else "index.html#services"
-    tiles.append(f'<li><a class="nav__tile nav__tile--all" href="{all_href}"><b>All {len(SERVICES)}</b><span>View all services <svg class="arrow" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5h26M22 1l4 4-4 4"/></svg></span></a></li>')
-    i = 0
-    main_links = []
-    for href, label, key in NAV:
-        extra = ""
-        if home and key == "services":
-            href, extra = "#services", ' data-scroll-step="0"'
-        elif home and key == "home":
-            href, extra = "#top", ' data-scroll-step="-1"'
-        elif home and key == "about":
-            href = "#about"
-        cur = ' aria-current="page"' if key == active else ""
-        main_links.append(f'<li class="menu__item" style="--i:{i}"><a class="menu__link" href="{href}" data-nav="{key}"{cur}{extra}>{label}</a></li>')
+    menu, small, i = [], [], 0
+    for k, label in NAV:
+        menu.append(f'<li class="menu__item" style="--i:{i}"><a class="menu__link" href="{href(k)}" data-nav="{k}"{cur(k)}>{label}</a></li>')
         i += 1
-    svc_links = []
     for s in SERVICES:
-        cur = ' aria-current="page"' if active == f"service-{s['slug']}" else ""
-        svc_links.append(f'<li class="menu__item" style="--i:{i}"><a class="menu__link" href="{svc_url(s)}"{cur}>{e(s["short"])}</a></li>')
+        c = ' aria-current="page"' if page == f"service-{s['slug']}" else ""
+        small.append(f'<li class="menu__item" style="--i:{i}"><a class="menu__link" href="{svc_url(s)}"{c}>{e(s["short"])}</a></li>')
         i += 1
     return f"""
 <body class="{'is-home' if home else 'is-page'}">
@@ -102,21 +98,23 @@ def header(active, home=False):
     <div class="nav__shell">
       <div class="nav__bar glass" data-glass>
         <a class="nav__logo" href="index.html" aria-label="VSQC home">VSQC</a>
-        <ul class="nav__links">{''.join(bar_links)}</ul>
-        <a class="nav__cta" href="contact.html">Contact</a>
+        <ul class="nav__links">{''.join(bar)}</ul>
+        <a class="nav__cta" href="{href('contact')}" data-nav="contact">Contact</a>
         <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
           <span class="nav__burger" aria-hidden="true"><i></i><i></i><i></i></span>
         </button>
       </div>
       <div class="nav__mega glass" id="nav-mega" aria-label="Services">
-        <ul class="nav__tiles">{''.join(tiles)}</ul>
+        <p class="svcmenu__label">Our services</p>
+        <ol class="svcmenu__list">{''.join(items)}</ol>
+        <a class="svcmenu__all" href="{all_href}"><span>See all {len(SERVICES)} services, one by one</span>{ARROW}</a>
       </div>
       <nav class="menu glass" id="menu" aria-label="Site">
         <p class="menu__label">Explore</p>
-        <ul class="menu__list">{''.join(main_links)}</ul>
+        <ul class="menu__list">{''.join(menu)}</ul>
         <hr class="menu__rule">
         <p class="menu__label">Services</p>
-        <ul class="menu__list menu__list--small">{''.join(svc_links)}</ul>
+        <ul class="menu__list menu__list--small">{''.join(small)}</ul>
         <div class="menu__foot"><span>{' · '.join(SITE['offices'])}</span><a href="mailto:{e(SITE['email'])}">{e(SITE['email'])}</a></div>
       </nav>
     </div>
@@ -125,8 +123,9 @@ def header(active, home=False):
 """
 
 
+
 def logos_block(title="Trusted by industry leaders and <em>certification bodies</em>",
-                note="Clients we have certified and the certification bodies we partner with."):
+                note="Clients we have certified and the certification bodies we partner with.", id_="", more_html=""):
     def tile(name, slug, tag, style):
         f = next((p for p in (OUT / "logos").glob(f"{slug}.*")), None) if (OUT / "logos").exists() else None
         if f:
@@ -140,7 +139,7 @@ def logos_block(title="Trusted by industry leaders and <em>certification bodies<
     row = "".join(tile(*l) for l in LOGOS) * 3
     chips = "".join(f'<li class="chip"><b>{e(c)}</b><span>{e(n)}</span></li>' for c, n, _ in STANDARDS)
     return f"""
-  <section class="logos" aria-label="Clients, partners and standards">
+  <section class="logos{' home-sec' if id_ else ''}"{f' id="{id_}"' if id_ else ''} aria-label="Clients, partners and standards">
     <div class="logos__head">
       <div>
         <p class="eyebrow rv"><span class="hairline"></span>Clients &amp; partners</p>
@@ -160,6 +159,7 @@ def logos_block(title="Trusted by industry leaders and <em>certification bodies<
         <ul class="marquee__list" aria-hidden="true">{chips}</ul>
       </div>
     </div>
+{more_html}
   </section>"""
 
 
@@ -276,6 +276,14 @@ def write(name, html):
 # ------------------------------------------------------------------
 # HOME
 # ------------------------------------------------------------------
+SYSTEMETA_LEAD = "Systemeta brings audits, documents, KPIs and risk into one place, with AI-based analysis. Clients and employees access it through the VSQC Portal."
+
+
+def more(href, label):
+    """'See all …' link under a home section, pointing to its full page."""
+    return f'<div class="sec__more rv"><a class="btn btn--line" href="{href}">{label} {ARROW}</a></div>'
+
+
 def build_home():
     articles = []
     for i, s in enumerate(SERVICES):
@@ -337,7 +345,7 @@ def build_home():
     ) + header("home", home=True) + f"""
   <main id="content">
     <!-- SHOWCASE = HERO + SERVICES. .stage is sticky for the whole section. -->
-    <section class="showcase" id="top" data-theme="light" style="--steps: {N}">
+    <section class="showcase" id="top" data-theme="light" data-step="0" style="--steps: {N}">
       <div class="stage" id="stage">
         <div class="stage__media" aria-hidden="true">
           <div class="stage__camera" id="camera">
@@ -388,21 +396,24 @@ def build_home():
 {about_cards}
       </div>
     </section>
-    {logos_block()}
 
-    <!-- ALL SERVICES (quiet text index) -->
-    <section class="sec sec--tight">
-      {sec_head('All services', 'Seven practices, <em>one partner</em>', HOME['services_intro'])}
-      <ol class="idx">
-        {''.join(f'''<li class="idx__row rv"><a href="{svc_url(s)}"><span class="idx__num">{i:02d}</span><span class="idx__title">{e(s['title'])}</span><span class="idx__desc">{e(s['line'])}</span>{ARROW}</a></li>''' for i, s in enumerate(SERVICES, 1))}
-      </ol>
+    <!-- The rest of the site, in nav order. Each block links to its full page. -->
+    <section class="sec home-sec" id="achievements">
+      {sec_head('Track record', 'Achievements, <em>clients</em> and credentials')}
+      {numbered(ACHIEVEMENTS['rows'])}
+      {more('achievements.html', 'See all achievements')}
     </section>
-
-    <!-- EXPLORE VSQC -->
-    <section class="sec sec--tight">
-      {sec_head('Explore VSQC', 'Everything in <em>one place</em>')}
-      <ol class="idx">{index_rows}</ol>
+    <section class="sec home-sec" id="systemeta">
+      {sec_head('Systemeta', 'Your management system, <em>in one place</em>', SYSTEMETA_LEAD)}
+      {more('systemeta.html', 'Learn more about Systemeta')}
     </section>
+    {logos_block(id_='clients', more_html=more('clients.html', 'See all clients'))}
+    <section class="sec sec--split home-sec" id="team">
+      <div>{sec_head('Our team', 'Consulting partner to leading <em>certification bodies</em>')}</div>
+      <ul class="names rv">{''.join(f'<li>{e(c)}</li>' for c in ACHIEVEMENTS['partners'])}</ul>
+      {more('team.html', 'Meet the team')}
+    </section>
+    {contact_forms('contact', 'sec home-sec')}
   </main>
 """ + footer('<script src="main.js" defer></script>')
     write("index.html", html)
@@ -616,10 +627,52 @@ def build_team():
     write("team.html", html)
 
 
+def plain_hero(eyebrow, title_html, lead):
+    """Page hero without a video (the animation videos are hidden for now)."""
+    return f"""
+  <section class="phero" id="content">
+    <div class="phero__inner">
+      <p class="eyebrow hero-in"><span class="hairline"></span>{eyebrow}</p>
+      <h1 class="phero__title hero-in">{title_html}</h1>
+      <p class="phero__lead hero-in">{e(lead)}</p>
+    </div>
+    <a class="enter-hint enter-hint--page" href="#main" aria-label="Scroll down">
+      <span class="enter-hint__mouse" aria-hidden="true"><span></span></span>
+    </a>
+  </section>
+  <div id="main"></div>"""
+
+
+def build_systemeta():
+    lead = SYSTEMETA_LEAD
+    html = head("Systemeta — VSQC", "Systemeta brings audits, documents, KPIs and risk into one place, with AI-based analysis.") + header("systemeta") + f"""
+  <main>
+    {plain_hero('Systemeta', 'Your management system, <em>in one place</em>', lead)}
+    <!-- CONTENT TO COME: the details of Systemeta -->
+    <section class="sec sec--tight">
+      {sec_head('Coming soon', 'More about Systemeta, <em>soon</em>', 'This section is ready for the Systemeta details.')}
+    </section>
+  </main>
+""" + footer()
+    write("systemeta.html", html)
+
+
+def build_clients():
+    note = "Clients we have certified and the certification bodies we partner with."
+    html = head("Our Clients — VSQC", note) + header("clients") + f"""
+  <main>
+    {plain_hero('Our clients', 'Trusted by industry leaders', note)}
+    {logos_block()}
+  </main>
+""" + footer()
+    write("clients.html", html)
+
+
 # ------------------------------------------------------------------
 # CONTACT
 # ------------------------------------------------------------------
-def build_contact():
+def contact_forms(id_="forms", cls="sec"):
+    """The four contact forms in tabs (contact page, and the end of the home page)."""
     opts = "".join(f'<option value="{s["slug"]}">{e(s["title"])}</option>' for s in SERVICES)
     hp = '<label class="hp" aria-hidden="true">Leave empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>'
 
@@ -690,7 +743,14 @@ def build_contact():
     panels = "".join(
         f'<div class="panel" role="tabpanel" id="panel-{k}" aria-labelledby="tab-{k}"{"" if k == "rfq" else " hidden"}>{f}</div>'
         for k, (_, f) in forms.items())
+    return f"""<section class="{cls}" id="{id_}">
+      {sec_head('Forms', 'How can we <em>help</em>?', 'Request a quote or share your experience through our online forms. For concerns or complaints, use the secure grievance and whistleblower forms.')}
+      <div class="tabs rv" role="tablist" aria-label="Contact forms">{tabs}</div>
+      {panels}
+    </section>"""
 
+
+def build_contact():
     html = head("Contact VSQC — India, Sri Lanka, UAE", CONTACT["intro"],
                 '<link rel="preload" as="image" href="poster-1.jpg">') + header("contact") + f"""
   <main>
@@ -702,11 +762,7 @@ def build_contact():
       <ul class="names rv">{''.join(f'<li>{e(o)}</li>' for o in SITE['offices'])}</ul>
     </section>
 
-    <section class="sec" id="forms">
-      {sec_head('Forms', 'How can we <em>help</em>?', 'Request a quote or share your experience through our online forms. For concerns or complaints, use the secure grievance and whistleblower forms.')}
-      <div class="tabs rv" role="tablist" aria-label="Contact forms">{tabs}</div>
-      {panels}
-    </section>
+    {contact_forms()}
   </main>
 """ + footer()
     write("contact.html", html)
@@ -748,6 +804,8 @@ if __name__ == "__main__":
     build_services()
     build_portal()
     build_achievements()
+    build_systemeta()
+    build_clients()
     build_policies()
     build_team()
     build_contact()

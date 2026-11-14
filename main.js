@@ -244,6 +244,9 @@
   const hero = document.getElementById('hero');
   const ui = document.getElementById('services-ui');
   const aboutEl = document.getElementById('about');
+  // sections the nav links point to, in page order
+  const navSections = ['about', 'achievements', 'systemeta', 'clients', 'team', 'contact']
+    .map((id) => document.getElementById(id)).filter(Boolean);
   const articles = [...document.querySelectorAll('.svc')];
   const STEPS = articles.length;
 
@@ -313,11 +316,12 @@
     ui.style.setProperty('--ui', uiO.toFixed(3));
     ui.classList.toggle('is-on', uiO > 0.5);
 
-    // Glass nav: "Services" while the showcase is pinned, "About" while the About
-    // section crosses the middle of the screen, "Home" otherwise
-    const ab = aboutEl && aboutEl.getBoundingClientRect();
-    const navKey = p >= 0.5 && p < STEPS + 0.5 ? 'services'
-      : ab && ab.top < innerHeight / 2 && ab.bottom > innerHeight / 2 ? 'about' : 'home';
+    // Glass nav follows the page: "Services" while the showcase is pinned, then the
+    // section (About, Achievements … Contact) that crosses the middle of the screen
+    let navKey = p >= 0.5 && p < STEPS + 0.5 ? 'services' : 'home';
+    if (navKey === 'home') {
+      for (const el of navSections) if (el.getBoundingClientRect().top < innerHeight / 2) navKey = el.id;
+    }
     if (navKey !== state.nav && window.VSQC && VSQC.setNav) { state.nav = navKey; VSQC.setNav(navKey); }
 
     const step = p < 0.5 ? -1 : clamp(Math.floor(p - 0.5), 0, STEPS - 1);
@@ -464,10 +468,11 @@
     if (lenis) lenis.scrollTo(y, { immediate: true, force: true });
     else scrollTo(0, y);
   }
-  // …and via index.html#about → the About section, just under the nav bar
-  if (location.hash === '#about' && aboutEl) {
+  // …and via index.html#about, #achievements … #contact → that section, just under the nav bar
+  const hashEl = navSections.find((el) => location.hash === '#' + el.id);
+  if (hashEl) {
     history.replaceState(null, '', location.pathname);
-    const y = aboutEl.getBoundingClientRect().top + scrollY - 80;
+    const y = hashEl.getBoundingClientRect().top + scrollY - 80;
     const lenis = window.VSQC && VSQC.lenis;
     if (lenis) lenis.scrollTo(y, { immediate: true, force: true });
     else scrollTo(0, y);
