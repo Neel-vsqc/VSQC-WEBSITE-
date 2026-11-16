@@ -49,7 +49,7 @@ def head(title, desc, preload=""):
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Roboto+Serif:opsz,wdth,wght@8..144,75,400&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
   {preload}
-  <link rel="stylesheet" href="styles.css?v=20261114">
+  <link rel="stylesheet" href="styles.css?v=20261116">
 </head>"""
 
 
@@ -792,7 +792,7 @@ def build_404():
   </main>
 """ + footer()
     # absolute asset paths so the 404 page also renders under nested URLs
-    html = html.replace('href="styles.css?v=20261114"', 'href="/styles.css?v=20261114"').replace('src="site.js"', 'src="/site.js"')
+    html = html.replace('href="styles.css?v=20261116"', 'href="/styles.css?v=20261116"').replace('src="site.js"', 'src="/site.js"')
     write("404.html", html)
 
 

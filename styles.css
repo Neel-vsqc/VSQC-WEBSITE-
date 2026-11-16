@@ -936,10 +936,11 @@ button, input, textarea, select { font-family: inherit; }   /* form controls don
 html.menu-open { overflow: hidden; }
 
 .eyebrow {
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--body);
 }
 
 /* Reveal on scroll (site.js adds .in) */
@@ -1528,7 +1529,6 @@ button:disabled { opacity: 0.5; cursor: wait; }
   animation: marquee var(--speed, 45s) linear infinite;
 }
 .marquee--reverse .marquee__track { animation-direction: reverse; }
-.marquee:hover .marquee__track { animation-play-state: paused; }
 .marquee__list {
   display: flex;
   align-items: center;
@@ -1928,3 +1928,119 @@ h1 em, h2 em, h3 em, .footer__line em, .svcmenu__title em {
   font-size: 1.08em;        /* Instrument Serif runs a touch smaller */
   letter-spacing: 0;
 }
+
+/* ==========================================================================
+   Clients page: hero with media frame, featured strip, full logo wall
+   ========================================================================== */
+
+/* featured strip: real logos, one colour */
+.logos__head--plain { align-items: flex-start; }
+.logos__head--plain .eyebrow { margin: 0; }
+.logo--img { min-width: 200px; padding: 0 2rem; background: #ffffff !important; border: 0; box-shadow: none; }
+.logo--img::before, .logo--img::after { display: none; }
+.logo--img img { max-height: 46px; max-width: 150px; object-fit: contain; filter: none !important; opacity: 1 !important; mix-blend-mode: multiply; }
+/* white-only logos: same white tile as the rest, logo shown in dark */
+.logo--img.logo--dark img { filter: brightness(0) !important; opacity: 0.85 !important; mix-blend-mode: normal; }
+.logos__more { display: flex; justify-content: center; margin-top: clamp(2.5rem, 6vh, 3.5rem); padding: 0 var(--gutter); }
+
+/* full logo wall */
+.wall { padding: clamp(4rem, 11vh, 7rem) var(--gutter); scroll-margin-top: 70px; }
+.wall__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1.25rem 2rem; margin-bottom: 2rem; }
+.wall__title { font-size: clamp(1.9rem, 3.2vw, 3.2rem); line-height: 1.05; max-width: 22ch; }
+.wall__head .eyebrow { margin-bottom: 1.25rem; }
+.wall__search { position: relative; width: min(100%, 22rem); }
+.wall__search input {
+  width: 100%;
+  height: 48px;
+  padding: 0 1.1rem 0 2.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink);
+  font: 400 0.95rem var(--sans);
+}
+.wall__search input::placeholder { color: var(--muted); }
+.wall__search input:focus { outline: 2px solid var(--ink); outline-offset: 2px; }
+.wall__search svg { position: absolute; left: 1.05rem; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); fill: none; stroke: var(--muted); stroke-width: 1.8; }
+.wall__filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 2.5rem; padding: 0; list-style: none; }
+.wall__filter {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  height: 38px; padding: 0 0.95rem;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: none; color: var(--body);
+  font: 500 0.82rem/1 var(--sans); cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.wall__filter small { font-size: 0.72rem; color: var(--muted); }
+.wall__filter:hover { border-color: var(--ink); color: var(--ink); }
+.wall__filter[aria-pressed="true"] { background: #0f2440; border-color: #0f2440; color: #ffffff; }
+.wall__filter[aria-pressed="true"] small { color: #d5e1ef; }
+@media (max-width: 700px) {
+  .wall__filters { flex-wrap: nowrap; overflow-x: auto; margin-right: calc(var(--gutter) * -1); padding-right: var(--gutter); scrollbar-width: none; }
+  .wall__filter { flex-shrink: 0; }
+}
+.wall__group { margin-bottom: 3rem; }
+.wall__group[hidden] { display: none; }
+.wall__gtitle { display: flex; align-items: baseline; gap: 0.75rem; margin: 0 0 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--line); font: 400 1.5rem/1.1 var(--serif); color: var(--ink); }
+.wall__gtitle small { font: 500 0.75rem/1 var(--sans); letter-spacing: 0.08em; color: var(--muted); }
+.wall__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+.wall__grid--featured { grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); }
+.tile {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem;
+  min-height: 112px; padding: 1rem 0.9rem 0.8rem;
+  border: 1px solid rgba(15, 36, 64, 0.08); border-radius: 16px;
+  background: #ffffff;
+  text-align: center;
+  transition: transform 220ms var(--ease-out), box-shadow 220ms ease, background-color 220ms ease;
+}
+.tile[hidden] { display: none; }
+.tile__logo { display: flex; align-items: center; justify-content: center; width: 100%; height: 48px; }
+.tile__logo img { max-width: 92%; max-height: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 260ms var(--ease-out); }
+.tile__name { font-size: 0.72rem; line-height: 1.3; color: var(--muted); }
+.tile--text .tile__logo { height: auto; min-height: 48px; font: 400 1.12rem/1.2 var(--serif); color: var(--ink); }
+.wall__grid--featured .tile { min-height: 140px; }
+.wall__grid--featured .tile__logo { height: 62px; }
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover { transform: translateY(-3px); background: #ffffff; box-shadow: 0 16px 36px -20px rgba(15, 36, 64, 0.45); }
+}
+.wall__empty { padding: 2rem 0; color: var(--muted); }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.tile--dark .tile__logo img { mix-blend-mode: normal; filter: brightness(0); opacity: 0.85; }
+.phero__stats { display: flex; flex-wrap: wrap; gap: 0.6rem 2.25rem; margin: 2.25rem 0 0; padding: 0; list-style: none; }
+.phero__stats li { display: flex; flex-direction: column; gap: 0.3rem; }
+.phero__stats b { font: 400 clamp(2rem, 3vw, 2.6rem)/1 var(--serif); color: var(--ink); }
+.phero__stats span { font-size: 0.8rem; letter-spacing: 0.04em; color: var(--muted); }
+.wall__hint { margin: 0 0 0.75rem; font-size: 0.8rem; color: var(--muted); }
+/* tiles are always white cards, so their text stays navy on any background */
+.tile .tile__name { color: rgba(15, 36, 64, 0.62); }
+.tile--text .tile__logo { color: #0d1f38; }
+/* the wall on a navy screen */
+[data-tone="dark"] .wall__search input { background: rgba(255, 255, 255, 0.08); }
+[data-tone="dark"] .wall__search input:focus { outline-color: #ffffff; }
+[data-tone="dark"] .wall__filter[aria-pressed="true"] { background: #ffffff; border-color: #ffffff; color: #0f2440; }
+[data-tone="dark"] .wall__filter[aria-pressed="true"] small { color: rgba(15, 36, 64, 0.6); }
+[data-tone="dark"] .tile { border-color: transparent; }
+@media (hover: hover) and (pointer: fine) { [data-tone="dark"] .tile:hover { box-shadow: 0 16px 36px -16px rgba(0, 0, 0, 0.5); } }
+
+/* Logos without backgrounds (home strip + Clients page) */
+.logo--img { background: none !important; border: 0; box-shadow: none; min-width: 0; height: 120px; padding: 0 3rem; }
+.logo--img img { max-height: 64px; max-width: 210px; }
+.wall { border-top: 1px solid var(--line); }
+.wall__grid { gap: 0.5rem 1rem; }
+.wall__grid .tile { background: transparent; border: 0; border-radius: 12px; box-shadow: none; min-height: 120px; }
+.wall__grid .tile__logo { height: 56px; }
+.wall__grid--featured .tile { min-height: 150px; }
+.wall__grid--featured .tile__logo { height: 76px; }
+.wall__grid .tile .tile__name { opacity: 0; transition: opacity 200ms ease; }
+@media (hover: hover) and (pointer: fine) {
+  .wall__grid .tile:hover {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.06));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.35), 0 14px 30px -18px rgba(15, 36, 64, 0.35);
+  }
+  .wall__grid .tile:hover .tile__logo img { transform: scale(1.04); }
+  .wall__grid .tile:hover .tile__name { opacity: 1; }
+}
+@media (hover: none) { .wall__grid .tile .tile__name { opacity: 1; } }
+/* Home client strip: every logo gets the same fixed slot, so the loop is seamless (no gap) */
+.logo--img { flex: 0 0 auto; width: 260px; padding: 0 1.5rem; }
+.logo--img img { width: auto; height: auto; max-width: 100%; max-height: 64px; }

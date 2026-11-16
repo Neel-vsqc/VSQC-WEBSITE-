@@ -403,7 +403,10 @@
   const show = document.querySelector('.showcase');
   [...document.querySelectorAll('main > section')].filter((s) => s !== show)
     /* home: the services end on a light screen, so the sections below start dark */
-    .forEach((s, i) => { s.dataset.tone = (i + (show ? 1 : 0)) % 2 === 0 ? 'light' : 'dark'; });
+    .forEach((s, i) => {
+      if (s.hasAttribute('data-tone-lock')) return;   // section keeps the tone written in its HTML
+      s.dataset.tone = (i + (show ? 1 : 0)) % 2 === 0 ? 'light' : 'dark';
+    });
 
   const stage = document.getElementById('stage');
   if (!show || !stage) return;
