@@ -9,6 +9,8 @@
   const allBtn = buttons.find((b) => b.dataset.filter === 'all');
   const input = wall.querySelector('.wall__search input');
   const empty = wall.querySelector('.wall__empty');
+  const others = wall.querySelector('.others');
+  const otherGroups = [...wall.querySelectorAll('.others__group')];
   const picked = new Set();
 
   function render() {
@@ -28,8 +30,23 @@
       g.hidden = !groupOn || visible === 0;
       if (!g.hidden && !isFeatured) shown += visible;
     });
+    // "Other clients" (names without a logo): same industry filter and search
+    let otherShown = 0;
+    otherGroups.forEach((g) => {
+      const on = all || picked.has(g.dataset.industry);
+      let first = true, visible = 0;
+      g.querySelectorAll('li').forEach((li) => {
+        const hit = on && (!q || li.dataset.name.includes(q));
+        li.hidden = !hit;
+        li.toggleAttribute('data-first', hit && first);
+        if (hit) { first = false; visible++; }
+      });
+      g.hidden = visible === 0;
+      otherShown += visible;
+    });
+    if (others) others.hidden = otherShown === 0;
     buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === allBtn ? all : picked.has(b.dataset.filter))));
-    empty.hidden = shown > 0;
+    empty.hidden = shown + otherShown > 0;
   }
 
   buttons.forEach((b) => b.addEventListener('click', () => {
